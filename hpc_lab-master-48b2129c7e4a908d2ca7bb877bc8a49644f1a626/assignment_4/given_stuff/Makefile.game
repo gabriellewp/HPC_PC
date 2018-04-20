@@ -1,0 +1,21 @@
+CXX=icpc
+CXXFLAGS=-O3 -xHost
+LDFLAGS=-lrt
+DEFINES=
+SOURCES=game.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=game
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $< -o $@ $(DEFINES)
+
+$(SOURCES): Makefile.game
+	touch $@
+
+clean:
+	rm *.o *.optrpt $(EXECUTABLE)

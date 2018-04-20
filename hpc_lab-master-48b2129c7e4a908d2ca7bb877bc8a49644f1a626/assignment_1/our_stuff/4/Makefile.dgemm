@@ -1,0 +1,32 @@
+K=128
+
+# TODO
+# Adjust these values
+M=8
+N=8
+ALIGNMENT=64
+# END TODO
+
+# -S -fsource-asm
+
+CXX=icpc
+CXXFLAGS=-O3 -qopenmp -ansi-alias -no-prec-div -qopt-report=5 -qopt-report-phase=vec -xMIC-AVX512
+LDFLAGS=-parallel
+DEFINES=-DALIGNMENT=$(ALIGNMENT) -DM=$(M) -DN=$(N) -DK=$(K)
+SOURCES=dgemm.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=dgemm
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $< -o $@ $(DEFINES)
+	
+$(SOURCES): Makefile.dgemm
+	touch $@
+
+clean:
+	rm *.o $(EXECUTABLE)

@@ -1,0 +1,20 @@
+CXX=icpc
+CXXFLAGS=-O3 -xMIC-AVX512 -qopenmp
+LDFLAGS=-qopenmp
+SOURCES=quicksort.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=quicksort
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $< -o $@ $(DEFINES)
+	
+$(SOURCES): Makefile.quicksort
+	touch $@
+
+clean:
+	rm *.o $(EXECUTABLE)

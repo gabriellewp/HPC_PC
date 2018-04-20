@@ -1,0 +1,30 @@
+# TODO
+# Adjust these values, if necessary
+MC=128
+M=16
+N=8
+K=64
+# END TODO
+ALIGNMENT=64
+
+CXX=icpc
+CXXFLAGS=-O3 -xMIC-AVX512 -c
+LDFLAGS=-c
+DEFINES=-DALIGNMENT=$(ALIGNMENT) -DM=$(M) -DN=$(N) -DK=$(K) -DMC=$(MC)
+SOURCES=phicalculation_serial.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=phicalculation_serial
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $< -o $@ $(DEFINES)
+	
+$(SOURCES): Makefile.phiserial
+	touch $@
+
+clean:
+	rm *.o $(EXECUTABLE)

@@ -1,0 +1,330 @@
+Intel(R) Advisor can now assist with vectorization and show optimization
+  report messages with your source code.
+See "https://software.intel.com/en-us/intel-advisor-xe" for details.
+
+Intel(R) C++ Intel(R) 64 Compiler for applications running on Intel(R) 64, Version 17.0.4.196 Build 20170411
+
+Compiler options: -c -O3 -qopt-report=5 -qopt-report-phase=all -xMIC-AVX512 -o gauss.o -DNRHS=2000
+
+    Report from: Interprocedural optimizations [ipo]
+
+  WHOLE PROGRAM (SAFE) [EITHER METHOD]: false
+  WHOLE PROGRAM (SEEN) [TABLE METHOD]: false
+  WHOLE PROGRAM (READ) [OBJECT READER METHOD]: false
+
+INLINING OPTION VALUES:
+  -inline-factor: 100
+  -inline-min-size: 30
+  -inline-max-size: 230
+  -inline-max-total-size: 2000
+  -inline-max-per-routine: 10000
+  -inline-max-per-compile: 500000
+
+In the inlining report below:
+   "sz" refers to the "size" of the routine. The smaller a routine's size,
+      the more likely it is to be inlined.
+   "isz" refers to the "inlined size" of the routine. This is the amount
+      the calling routine will grow if the called routine is inlined into it.
+      The compiler generally limits the amount a routine can grow by having
+      routines inlined into it.
+
+Begin optimization report for: main()
+
+    Report from: Interprocedural optimizations [ipo]
+
+INLINE REPORT: (main()) [1/10=10.0%] gauss.cpp(30,12)
+  -> INLINE (MANUAL): (52,13) Stopwatch::Stopwatch(Stopwatch *) (isz = 0) (sz = 5)
+  -> INLINE (MANUAL): (53,13) Stopwatch::start(Stopwatch *) (isz = 4) (sz = 9)
+    -> EXTERN: Stopwatch.h:(27,5) clock_gettime(clockid_t, timespec *)
+  -> INLINE (MANUAL): (83,27) Stopwatch::stop(Stopwatch *) (isz = 26) (sz = 33)
+    -> INLINE (MANUAL): Stopwatch.h:(44,19) Stopwatch::pause(Stopwatch *) (isz = 22) (sz = 29)
+      -> EXTERN: (38,5) clock_gettime(clockid_t, timespec *)
+      -> INLINE (MANUAL): (39,15) Stopwatch::difftime(Stopwatch *, timespec) (isz = 6) (sz = 14)
+      -> INLINE (MANUAL): (40,12) Stopwatch::seconds(Stopwatch *, long long) (isz = 0) (sz = 8)
+    -> INLINE (MANUAL): Stopwatch.h:(45,5) Stopwatch::reset(Stopwatch *) (isz = 0) (sz = 5)
+  -> EXTERN: (84,3) printf(const char *, ...)
+  -> INLINE: (88,26) check(int, double *) (isz = 26) (sz = 36)
+    -> DELETED: (99,67) std::numeric_limits<double>::epsilon() (isz = 0) (sz = 4)
+  -> EXTERN: (91,5) printf(const char *, ...)
+
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at gauss.cpp(37,3)
+   remark #15344: loop was not vectorized: vector dependence prevents vectorization
+   remark #15346: vector dependence: assumed OUTPUT dependence between A[3*(r*3+j)+j] (40:3) and A[3*(r*3+i)+j] (47:4)
+   remark #15346: vector dependence: assumed OUTPUT dependence between A[3*(r*3+i)+j] (47:4) and A[3*(r*3+j)+j] (40:3)
+
+   LOOP BEGIN at gauss.cpp(38,2)
+      remark #15344: loop was not vectorized: vector dependence prevents vectorization
+      remark #15346: vector dependence: assumed OUTPUT dependence between A[3*(r*3+j)+j] (40:3) and A[3*(r*3+i)+j] (47:4)
+      remark #15346: vector dependence: assumed OUTPUT dependence between A[3*(r*3+i)+j] (47:4) and A[3*(r*3+j)+j] (40:3)
+      remark #25436: completely unrolled by 3
+
+      LOOP BEGIN at gauss.cpp(43,3)
+         remark #15329: vectorization support: non-unit strided store was emulated for the variable <A[3*(r*3+i)+j]>, stride is 3   [ gauss.cpp(44,4) ]
+         remark #15305: vectorization support: vector length 2
+         remark #15335: loop was not vectorized: vectorization possible but seems inefficient. Use vector always directive or -vec-threshold0 to override
+         remark #15329: vectorization support: non-unit strided store was emulated for the variable <A[3*(r*3+i)+j]>, masked, stride is 3   [ gauss.cpp(44,4) ]
+         remark #15305: vectorization support: vector length 2
+         remark #15309: vectorization support: normalized vectorization overhead 0.048
+         remark #15462: unmasked indexed (or gather) loads: 1
+         remark #15475: --- begin vector cost summary ---
+         remark #15476: scalar cost: 3
+         remark #15477: vector cost: 21.000
+         remark #15478: estimated potential speedup: 0.060
+         remark #15488: --- end vector cost summary ---
+         remark #25436: completely unrolled by 2
+      LOOP END
+
+      LOOP BEGIN at gauss.cpp(43,3)
+      LOOP END
+   LOOP END
+LOOP END
+
+LOOP BEGIN at gauss.cpp(56,3)
+   remark #15416: vectorization support: non-unit strided store was generated for the variable <A[3*(r*3+i)+j]>, stride is 9   [ gauss.cpp(61,6) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <A[3*(r*3+i)+j]>, stride is 9   [ gauss.cpp(61,23) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <A[3*(r*3+i)+i]>, stride is 9   [ gauss.cpp(61,40) ]
+   remark #15416: vectorization support: non-unit strided store was generated for the variable <b[r*3+i]>, stride is 3   [ gauss.cpp(63,3) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <b[r*3+i]>, stride is 3   [ gauss.cpp(63,14) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <A[3*(r*3+i)+i]>, stride is 9   [ gauss.cpp(63,25) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <A[3*(r*3+j)+i]>, stride is 9   [ gauss.cpp(66,20) ]
+   remark #15416: vectorization support: non-unit strided store was generated for the variable <A[3*(r*3+j)+k]>, stride is 9   [ gauss.cpp(68,5) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <A[3*(r*3+j)+k]>, stride is 9   [ gauss.cpp(68,22) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <A[3*(r*3+i)+k]>, stride is 9   [ gauss.cpp(68,39) ]
+   remark #15416: vectorization support: non-unit strided store was generated for the variable <b[r*3+j]>, stride is 3   [ gauss.cpp(70,4) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <b[r*3+j]>, stride is 3   [ gauss.cpp(70,15) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <b[r*3+i]>, stride is 3   [ gauss.cpp(70,35) ]
+   remark #15416: vectorization support: non-unit strided store was generated for the variable <x[r*3+i]>, stride is 3   [ gauss.cpp(75,3) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <b[r*3+i]>, stride is 3   [ gauss.cpp(75,14) ]
+   remark #15416: vectorization support: non-unit strided store was generated for the variable <x[r*3+i]>, stride is 3   [ gauss.cpp(77,4) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <x[r*3+i]>, stride is 3   [ gauss.cpp(77,4) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <A[3*(r*3+i)+j]>, stride is 9   [ gauss.cpp(77,16) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <x[r*3+j]>, stride is 3   [ gauss.cpp(77,33) ]
+   remark #15416: vectorization support: non-unit strided store was generated for the variable <x[r*3+i]>, stride is 3   [ gauss.cpp(75,3) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <b[r*3+i]>, stride is 3   [ gauss.cpp(75,14) ]
+   remark #15416: vectorization support: non-unit strided store was generated for the variable <x[r*3+i]>, stride is 3   [ gauss.cpp(77,4) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <x[r*3+i]>, stride is 3   [ gauss.cpp(77,4) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <A[3*(r*3+i)+j]>, stride is 9   [ gauss.cpp(77,16) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <x[r*3+j]>, stride is 3   [ gauss.cpp(77,33) ]
+   remark #15416: vectorization support: non-unit strided store was generated for the variable <x[r*3+i]>, stride is 3   [ gauss.cpp(75,3) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <b[r*3+i]>, stride is 3   [ gauss.cpp(75,14) ]
+   remark #15416: vectorization support: non-unit strided store was generated for the variable <x[r*3+i]>, stride is 3   [ gauss.cpp(77,4) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <x[r*3+i]>, stride is 3   [ gauss.cpp(77,4) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <A[3*(r*3+i)+j]>, stride is 9   [ gauss.cpp(77,16) ]
+   remark #15415: vectorization support: non-unit strided load was generated for the variable <x[r*3+j]>, stride is 3   [ gauss.cpp(77,33) ]
+   remark #15305: vectorization support: vector length 8
+   remark #15309: vectorization support: normalized vectorization overhead 0.007
+   remark #15301: SIMD LOOP WAS VECTORIZED
+   remark #15452: unmasked strided loads: 21
+   remark #15453: unmasked strided stores: 10
+   remark #15475: --- begin vector cost summary ---
+   remark #15476: scalar cost: 118
+   remark #15477: vector cost: 105.870
+   remark #15478: estimated potential speedup: 1.110
+   remark #15486: divides: 2
+   remark #15488: --- end vector cost summary ---
+   remark #25015: Estimate of max trip count of loop=250
+
+   LOOP BEGIN at gauss.cpp(58,2)
+      remark #25460: No loop optimizations reported
+
+      LOOP BEGIN at gauss.cpp(60,3)
+         remark #25460: No loop optimizations reported
+         remark #25015: Estimate of max trip count of loop=2
+      LOOP END
+
+      LOOP BEGIN at gauss.cpp(65,3)
+         remark #25096: Loop Interchange not done due to: Imperfect Loop Nest (Either at Source or due to other Compiler Transformations)
+         remark #25451: Advice: Loop Interchange, if possible, might help loopnest. Suggested Permutation : ( 1 2 ) --> ( 2 1 )
+         remark #25015: Estimate of max trip count of loop=2
+
+         LOOP BEGIN at gauss.cpp(67,4)
+            remark #25460: No loop optimizations reported
+            remark #25015: Estimate of max trip count of loop=3
+         LOOP END
+      LOOP END
+   LOOP END
+
+   LOOP BEGIN at gauss.cpp(74,2)
+      remark #25096: Loop Interchange not done due to: Imperfect Loop Nest (Either at Source or due to other Compiler Transformations)
+      remark #25451: Advice: Loop Interchange, if possible, might help loopnest. Suggested Permutation : ( 1 2 ) --> ( 2 1 )
+      remark #25436: completely unrolled by 3   (pre-vector)
+   LOOP END
+
+   LOOP BEGIN at gauss.cpp(76,3)
+      remark #25460: No loop optimizations reported
+      remark #25015: Estimate of max trip count of loop=2
+   LOOP END
+
+   LOOP BEGIN at gauss.cpp(76,3)
+      remark #25460: No loop optimizations reported
+      remark #25015: Estimate of max trip count of loop=2
+   LOOP END
+
+   LOOP BEGIN at gauss.cpp(76,3)
+      remark #25460: No loop optimizations reported
+      remark #25015: Estimate of max trip count of loop=2
+   LOOP END
+LOOP END
+
+LOOP BEGIN at gauss.cpp(87,3)
+   remark #15344: loop was not vectorized: vector dependence prevents vectorization
+   remark #15346: vector dependence: assumed FLOW dependence between correct (88:5) and correct (88:15)
+   remark #15346: vector dependence: assumed ANTI dependence between correct (88:15) and correct (88:5)
+   remark #15346: vector dependence: assumed ANTI dependence between correct (88:15) and correct (88:5)
+   remark #15346: vector dependence: assumed FLOW dependence between correct (88:5) and correct (88:15)
+
+   LOOP BEGIN at gauss.cpp(98,3) inlined into gauss.cpp(88,26)
+      remark #15520: loop was not vectorized: loop with multiple exits cannot be vectorized unless it meets search loop idiom criteria   [ gauss.cpp(99,5) ]
+   LOOP END
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+gauss.cpp(75,14):remark #34030: adjacent sparse (strided) loads optimized for speed. Details: stride { 24 }, types { F64-V512, F64-V512, F64-V512 }, number of elements { 8 }, select mask { 0x000000007 }.
+gauss.cpp(75,3):remark #34034: adjacent sparse (strided) stores optimized for speed. Details: stride { 24 }, types { F64-V512, F64-V512, F64-V512 }, number of elements { 8 }, select mask { 0x000000007 }.
+gauss.cpp(30,12):remark #34051: REGISTER ALLOCATION : [main] gauss.cpp:30
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   63[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm31 k0-k7]
+        Callee-save  :    6[ rbx rbp r12-r15]
+        Assigned     :   45[ rax rdx rcx rbx rsi rdi r8-r15 zmm0-zmm24 k0-k5]
+
+    Routine temporaries
+        Total         :     207
+            Global    :      86
+            Local     :     121
+        Regenerable   :      55
+        Spilled       :      15
+
+    Routine stack
+        Variables     :   240044 bytes*
+            Reads     :      14 [2.45e+07 ~ 0.0%]
+            Writes    :      22 [1.05e+07 ~ 0.0%]
+        Spills        :     120 bytes*
+            Reads     :      19 [1.23e+08 ~ 0.0%]
+            Writes    :      19 [3.59e+03 ~ 0.0%]
+
+    Notes
+
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+
+
+===========================================================================
+
+Begin optimization report for: std::numeric_limits<double>::epsilon()
+
+    Report from: Interprocedural optimizations [ipo]
+
+DEAD STATIC FUNCTION: (std::numeric_limits<double>::epsilon()) /usr/include/c++/4.8/limits(1655,39)
+
+===========================================================================
+
+Begin optimization report for: check(int, double *)
+
+    Report from: Interprocedural optimizations [ipo]
+
+INLINE REPORT: (check(int, double *)) [3/10=30.0%] gauss.cpp(97,37)
+  -> DELETED: (99,67) std::numeric_limits<double>::epsilon() (isz = 0) (sz = 4)
+
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at gauss.cpp(98,3)
+   remark #15520: loop was not vectorized: loop with multiple exits cannot be vectorized unless it meets search loop idiom criteria   [ gauss.cpp(100,14) ]
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+gauss.cpp(97,37):remark #34051: REGISTER ALLOCATION : [_Z5checkiPd] gauss.cpp:97
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   63[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm31 k0-k7]
+        Callee-save  :    6[ rbx rbp r12-r15]
+        Assigned     :   15[ rax rdx rsi rdi zmm0-zmm8 zmm16 k0]
+
+    Routine temporaries
+        Total         :      35
+            Global    :      10
+            Local     :      25
+        Regenerable   :       5
+        Spilled       :       0
+
+    Routine stack
+        Variables     :       0 bytes*
+            Reads     :       0 [0.00e+00 ~ 0.0%]
+            Writes    :       0 [0.00e+00 ~ 0.0%]
+        Spills        :       0 bytes*
+            Reads     :       0 [0.00e+00 ~ 0.0%]
+            Writes    :       0 [0.00e+00 ~ 0.0%]
+
+    Notes
+
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+
+
+===========================================================================
+
+Begin optimization report for: Stopwatch::stop(Stopwatch *)
+
+    Report from: Interprocedural optimizations [ipo]
+
+DEAD STATIC FUNCTION: (Stopwatch::stop(Stopwatch *)) Stopwatch.h(43,17)
+
+===========================================================================
+
+Begin optimization report for: Stopwatch::pause(Stopwatch *)
+
+    Report from: Interprocedural optimizations [ipo]
+
+DEAD STATIC FUNCTION: (Stopwatch::pause(Stopwatch *)) Stopwatch.h(36,18)
+
+===========================================================================
+
+Begin optimization report for: Stopwatch::start(Stopwatch *)
+
+    Report from: Interprocedural optimizations [ipo]
+
+DEAD STATIC FUNCTION: (Stopwatch::start(Stopwatch *)) Stopwatch.h(26,16)
+
+===========================================================================
+
+Begin optimization report for: Stopwatch::reset(Stopwatch *)
+
+    Report from: Interprocedural optimizations [ipo]
+
+DEAD STATIC FUNCTION: (Stopwatch::reset(Stopwatch *)) Stopwatch.h(22,16)
+
+===========================================================================
+
+Begin optimization report for: Stopwatch::Stopwatch(Stopwatch *)
+
+    Report from: Interprocedural optimizations [ipo]
+
+DEAD STATIC FUNCTION: (Stopwatch::Stopwatch(Stopwatch *)) Stopwatch.h(20,27)
+
+===========================================================================
+
+Begin optimization report for: Stopwatch::seconds(Stopwatch *, long long)
+
+    Report from: Interprocedural optimizations [ipo]
+
+DEAD STATIC FUNCTION: (Stopwatch::seconds(Stopwatch *, long long)) Stopwatch.h(15,34)
+
+===========================================================================
+
+Begin optimization report for: Stopwatch::difftime(Stopwatch *, timespec)
+
+    Report from: Interprocedural optimizations [ipo]
+
+DEAD STATIC FUNCTION: (Stopwatch::difftime(Stopwatch *, timespec)) Stopwatch.h(11,43)
+
+===========================================================================

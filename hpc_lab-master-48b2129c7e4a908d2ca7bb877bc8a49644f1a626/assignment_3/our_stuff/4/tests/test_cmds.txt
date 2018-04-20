@@ -1,0 +1,57 @@
+mpiexec -n 1 ./poisson_init 0.125 100 0.0001
+mpiexec -n 8 ./poisson 0.125 100 0.0001
+
+mpiexec -n 1 ./poisson_init 0.04 100 0.0001
+mpiexec -n 25 ./poisson 0.04 100 0.0001
+
+mpiexec -n 1 ./poisson_init 0.015625 1000 0.0001
+mpiexec -n 22 ./poisson 0.015625 1000 0.0001
+
+mpiexec -n 1 ./poisson_init 0.00390625 1000 0.0001
+mpiexec -n 52 ./poisson 0.00390625 1000 0.0001
+
+mpiexec -n 1 ./poisson_init 0.0025 1000 0.0001
+mpiexec -n 58 ./poisson 0.0025 1000 0.0001
+mpiexec -n 22 ./poisson 0.0025 1000 0.0001 (war schneller)
+
+mpiexec -n 1 ./poisson_init 0.00125 1000 0.0001
+mpiexec -n 48 ./poisson 0.00125 1000 0.0001
+mpiexec -n 18 ./poisson 0.00125 1000 0.0001 (war langsamer)
+
+8 Nodes
+#batch 26658
+mpiexec -n 512 ./poisson 0.000488997555 1000 0.0001
+#batch 26659
+mpiexec -n 293 ./poisson 0.000488997555 1000 0.0001
+#batch 26660
+mpiexec -n 147 ./poisson 0.000488997555 1000 0.0001
+2 Nodes
+#batch 26702
+mpiexec -n 74 ./poisson 0.000488997555 1000 0.0001
+#batch 26703
+mpiexec -n 29 ./poisson 0.000488997555 1000 0.0001
+1 Node
+#batch 26704
+mpiexec -n 29 ./poisson 0.000488997555 1000 0.0001
+#batch 26705
+mpiexec -n 15 ./poisson 0.000488997555 1000 0.0001
+#batch 26706
+mpiexec -n 8 ./poisson 0.000488997555 1000 0.0001
+
+16 Nodes
+#batch 26661
+mpiexec -n 1024 ./poisson 0.00012217470983506 1000 0.00001
+#batch 26662
+mpiexec -n 373 ./poisson 0.00012217470983506 1000 0.00001
+#batch 26663
+mpiexec -n 63 ./poisson 0.00012217470983506 1000 0.00001
+#batch 26698
+mpiexec -n 683 ./poisson 0.00012217470983506 1000 0.00001
+#batch 26699
+mpiexec -n 249 ./poisson 0.00012217470983506 1000 0.00001
+#batch 26700
+mpiexec -n 125 ./poisson 0.00012217470983506 1000 0.00001
+
+32 Nodes
+#batch 26701
+mpiexec -n 2048 ./poisson 0.000061061244428161 1000 0.00001

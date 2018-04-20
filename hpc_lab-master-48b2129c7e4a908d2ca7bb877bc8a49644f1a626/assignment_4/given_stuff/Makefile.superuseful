@@ -1,0 +1,21 @@
+CXX=icpc
+CXXFLAGS=-O3 -xMIC-AVX512
+LDFLAGS=
+DEFINES=
+SOURCES=superuseful.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=superuseful
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $< -o $@ $(DEFINES)
+
+$(SOURCES): Makefile.superuseful
+	touch $@
+
+clean:
+	rm *.o *.optrpt $(EXECUTABLE)

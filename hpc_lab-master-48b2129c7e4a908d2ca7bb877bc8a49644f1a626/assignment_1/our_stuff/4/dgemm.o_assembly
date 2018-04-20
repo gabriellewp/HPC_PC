@@ -1,0 +1,3459 @@
+        .section .text
+.LNDBG_TX:
+# mark_description "Intel(R) C Intel(R) 64 Compiler for applications running on Intel(R) 64, Version 17.0.4.196 Build 20170411";
+# mark_description "-c -S -fsource-asm -O3 -qopt-report=5 -qopt-report-phase=vec -xMIC-AVX512 -o dgemm.o -DALIGNMENT=64 -DM=8 -D";
+# mark_description "N=8 -DK=128";
+        .file "dgemm.cpp"
+        .text
+..TXTST0:
+.L_2__routine_start_main_0:
+# -- Begin  main
+        .text
+# mark_begin;
+# Threads 2
+        .align    16,0x90
+        .globl main
+# --- main(int, char **)
+main:
+# parameter 1(argc): %edi
+# parameter 2(argv): %rsi
+..B1.1:                         # Preds ..B1.0
+                                # Execution count [1.00e+00]
+
+### int main(int argc, char** argv) {
+
+        .cfi_startproc
+        .cfi_personality 0x3,__gxx_personality_v0
+..___tag_value_main.1:
+..L2:
+                                                          #46.33
+..LN0:
+        .file   1 "dgemm.cpp"
+        .loc    1  46  is_stmt 1
+        pushq     %rbp                                          #46.33
+        .cfi_def_cfa_offset 16
+..LN1:
+        movq      %rsp, %rbp                                    #46.33
+        .cfi_def_cfa 6, 16
+        .cfi_offset 6, -16
+..LN2:
+        andq      $-128, %rsp                                   #46.33
+..LN3:
+        subq      $128, %rsp                                    #46.33 c1
+..LN4:
+        movq      %rbx, 56(%rsp)                                #46.33[spill] c3
+        .cfi_escape 0x10, 0x03, 0x0e, 0x38, 0x1c, 0x0d, 0x80, 0xff, 0xff, 0xff, 0x1a, 0x0d, 0xb8, 0xff, 0xff, 0xff, 0x22
+..LN5:
+        movl      %edi, %ebx                                    #46.33 c3
+..LN6:
+        movq      %r12, 48(%rsp)                                #46.33[spill] c3
+        .cfi_escape 0x10, 0x0c, 0x0e, 0x38, 0x1c, 0x0d, 0x80, 0xff, 0xff, 0xff, 0x1a, 0x0d, 0xb0, 0xff, 0xff, 0xff, 0x22
+..LN7:
+        movq      %rsi, %r12                                    #46.33 c3
+..LN8:
+        movq      %r15, 64(%rsp)                                #46.33[spill] c5
+..LN9:
+        movq      $0x7389d9ffe, %rsi                            #46.33 c5
+..LN10:
+        movq      %r14, 72(%rsp)                                #46.33[spill] c5
+..LN11:
+        movl      $3, %edi                                      #46.33 c5
+..LN12:
+        movq      %r13, 40(%rsp)                                #46.33[spill] c7
+..LN13:
+        call      __intel_new_feature_proc_init                 #46.33 c7
+        .cfi_escape 0x10, 0x0d, 0x0e, 0x38, 0x1c, 0x0d, 0x80, 0xff, 0xff, 0xff, 0x1a, 0x0d, 0xa8, 0xff, 0xff, 0xff, 0x22
+        .cfi_escape 0x10, 0x0e, 0x0e, 0x38, 0x1c, 0x0d, 0x80, 0xff, 0xff, 0xff, 0x1a, 0x0d, 0xc8, 0xff, 0xff, 0xff, 0x22
+        .cfi_escape 0x10, 0x0f, 0x0e, 0x38, 0x1c, 0x0d, 0x80, 0xff, 0xff, 0xff, 0x1a, 0x0d, 0xc0, 0xff, 0xff, 0xff, 0x22
+..LN14:
+                                # LOE r12 ebx
+..B1.49:                        # Preds ..B1.1
+                                # Execution count [1.00e+00]
+..LN15:
+        vstmxcsr  (%rsp)                                        #46.33 c1
+..LN16:
+        .loc    1  47  is_stmt 1
+
+###   int repetitions = 10000;
+
+        movl      $10000, %r15d                                 #47.19 c1
+..LN17:
+        .loc    1  46  is_stmt 1
+        orl       $32832, (%rsp)                                #46.33 c3
+..LN18:
+        vldmxcsr  (%rsp)                                        #46.33 c5
+..LN19:
+        .loc    1  48  is_stmt 1
+
+###   if (argc > 1) {
+
+        cmpl      $1, %ebx                                      #48.14 c5
+..LN20:
+        jle       ..B1.4        # Prob 50%                      #48.14 c7
+..LN21:
+                                # LOE r12 r15d
+..B1.2:                         # Preds ..B1.49
+                                # Execution count [5.00e-01]
+..LN22:
+        .file   2 "/usr/include/stdlib.h"
+        .loc    2  280  is_stmt 1
+
+###     repetitions = atoi(argv[1]);
+###   }
+###
+###   /** Allocate memory */
+###   double* A, *B, *C, *A_test, *B_test, *C_test;
+###
+###   posix_memalign(reinterpret_cast<void**>(&A),      ALIGNMENT, M*K*sizeof(double));
+###   posix_memalign(reinterpret_cast<void**>(&B),      ALIGNMENT, K*N*sizeof(double));
+###   posix_memalign(reinterpret_cast<void**>(&C),      ALIGNMENT, M*N*sizeof(double));
+###   posix_memalign(reinterpret_cast<void**>(&A_test), ALIGNMENT, M*K*sizeof(double));
+###   posix_memalign(reinterpret_cast<void**>(&B_test), ALIGNMENT, K*N*sizeof(double));
+###   posix_memalign(reinterpret_cast<void**>(&C_test), ALIGNMENT, M*N*sizeof(double));
+###
+###   for (int j = 0; j < K; ++j) {
+###     for (int i = 0; i < M; ++i) {
+###       A[j*M + i] = i + j;
+###     }
+###   }
+###   for (int j = 0; j < N; ++j) {
+###     for (int i = 0; i < K; ++i) {
+###       B[j*K + i] = (K-i) + (N-j);
+###     }
+###   }
+###   memset(C, 0, M*N*sizeof(double));
+###   memcpy(A_test, A, M*K*sizeof(double));
+###   memcpy(B_test, B, K*N*sizeof(double));
+###   memset(C_test, 0, M*N*sizeof(double));
+###
+###   /** Check correctness of optimised dgemm */
+###   #pragma noinline
+###   {
+###     dgemm(A, B, C);
+###     dgemm_opt(A_test, B_test, C_test);
+###   }
+###
+###   double error = 0.0;
+###   for (int i = 0; i < M*N; ++i) {
+###     double diff = C[i] - C_test[i];
+###     error += diff*diff;
+###   }
+###   error = sqrt(error);
+###   if (error > std::numeric_limits<double>::epsilon()) {
+###     printf("Optimised DGEMM is incorrect. Error: %e\n", error);
+###     return -1;
+###   }
+###
+###   /** Test performance of optimised dgemm */
+###
+###   #pragma noinline
+###   dgemm_opt(A, B, C);
+###
+###   Stopwatch stopwatch;
+###   stopwatch.start();
+###
+###   #pragma noinline
+###   for (int r = 0; r < repetitions; ++r) {
+###     dgemm_opt(A, B, C);
+###     __asm__ __volatile__("");
+###   }
+###
+###   double time = stopwatch.stop();
+###   printf("%lf ms, %lf GFLOP/s\n", time * 1.0e3, repetitions*2.0*M*N*K/time * 1.0e-9);
+###
+###   /** Clean up */
+###
+###   free(A); free(B); free(C);
+###   free(A_test); free(B_test); free(C_test);
+###
+###   return 0;
+### }
+###
+ movq 8(%r12), %rcx #280.16 c1
+..LN23:
+        call      __intel_sse4_atol                             #280.16 c3
+..LN24:
+                                # LOE rax
+..B1.3:                         # Preds ..B1.2
+                                # Execution count [5.00e-01]
+..LN25:
+        movl      %eax, %r15d                                   #280.16 c1
+..LN26:
+                                # LOE r15d
+..B1.4:                         # Preds ..B1.3 ..B1.49
+                                # Execution count [1.00e+00]
+..LN27:
+        .loc    1  55  is_stmt 1
+        lea       80(%rsp), %rdi                                #55.3 c1
+..LN28:
+        movl      $64, %esi                                     #55.3 c1
+..LN29:
+        movl      $8192, %edx                                   #55.3 c1
+..LN30:
+#       posix_memalign(void **, size_t, size_t)
+        call      posix_memalign                                #55.3 c3
+..LN31:
+                                # LOE r15d
+..B1.5:                         # Preds ..B1.4
+                                # Execution count [1.00e+00]
+..LN32:
+        .loc    1  56  is_stmt 1
+        lea       88(%rsp), %rdi                                #56.3 c1
+..LN33:
+        movl      $64, %esi                                     #56.3 c1
+..LN34:
+        movl      $8192, %edx                                   #56.3 c1
+..LN35:
+#       posix_memalign(void **, size_t, size_t)
+        call      posix_memalign                                #56.3 c3
+..LN36:
+                                # LOE r15d
+..B1.6:                         # Preds ..B1.5
+                                # Execution count [1.00e+00]
+..LN37:
+        .loc    1  57  is_stmt 1
+        lea       96(%rsp), %rdi                                #57.3 c1
+..LN38:
+        movl      $64, %esi                                     #57.3 c1
+..LN39:
+        movl      $512, %edx                                    #57.3 c1
+..LN40:
+#       posix_memalign(void **, size_t, size_t)
+        call      posix_memalign                                #57.3 c3
+..LN41:
+                                # LOE r15d
+..B1.7:                         # Preds ..B1.6
+                                # Execution count [1.00e+00]
+..LN42:
+        .loc    1  58  is_stmt 1
+        lea       104(%rsp), %rdi                               #58.3 c1
+..LN43:
+        movl      $64, %esi                                     #58.3 c1
+..LN44:
+        movl      $8192, %edx                                   #58.3 c1
+..LN45:
+#       posix_memalign(void **, size_t, size_t)
+        call      posix_memalign                                #58.3 c3
+..LN46:
+                                # LOE r15d
+..B1.8:                         # Preds ..B1.7
+                                # Execution count [1.00e+00]
+..LN47:
+        .loc    1  59  is_stmt 1
+        lea       112(%rsp), %rdi                               #59.3 c1
+..LN48:
+        movl      $64, %esi                                     #59.3 c1
+..LN49:
+        movl      $8192, %edx                                   #59.3 c1
+..LN50:
+#       posix_memalign(void **, size_t, size_t)
+        call      posix_memalign                                #59.3 c3
+..LN51:
+                                # LOE r15d
+..B1.9:                         # Preds ..B1.8
+                                # Execution count [1.00e+00]
+..LN52:
+        .loc    1  60  is_stmt 1
+        lea       120(%rsp), %rdi                               #60.3 c1
+..LN53:
+        movl      $64, %esi                                     #60.3 c1
+..LN54:
+        movl      $512, %edx                                    #60.3 c1
+..LN55:
+#       posix_memalign(void **, size_t, size_t)
+        call      posix_memalign                                #60.3 c3
+..LN56:
+                                # LOE r15d
+..B1.10:                        # Preds ..B1.9
+                                # Execution count [1.00e+00]
+..LN57:
+        .loc    1  64  is_stmt 1
+        movq      80(%rsp), %rcx                                #64.7 c1
+..LN58:
+        .loc    1  62  is_stmt 1
+        xorl      %edx, %edx                                    #62.3 c1
+..LN59:
+        xorl      %eax, %eax                                    #62.3 c1
+        .align    16,0x90
+..LN60:
+                                # LOE rax rcx edx r15d
+..B1.11:                        # Preds ..B1.11 ..B1.10
+                                # Execution count [6.40e+01]
+..LN61:
+        .loc    1  64  is_stmt 1
+        lea       (%rdx,%rdx), %ebx                             #64.24 c1
+..LN62:
+        lea       1(%rdx,%rdx), %esi                            #64.24 c1
+..LN63:
+        .loc    1  62  is_stmt 1
+        addl      $1, %edx                                      #62.3 c1
+..LN64:
+        .loc    1  64  is_stmt 1
+        vmovd     %ebx, %xmm0                                   #64.24 c3
+..LN65:
+        vmovd     %esi, %xmm3                                   #64.24 c3
+..LN66:
+        vpbroadcastd %xmm0, %ymm1                               #64.24 c5
+..LN67:
+        vpbroadcastd %xmm3, %ymm4                               #64.24 c5
+..LN68:
+        vpaddd    .L_2il0floatpacket.7(%rip), %ymm1, %ymm2      #64.24 c7
+..LN69:
+        vpaddd    .L_2il0floatpacket.7(%rip), %ymm4, %ymm5      #64.24 c7
+..LN70:
+        vcvtdq2pd %ymm2, %zmm16                                 #64.24 c11
+..LN71:
+        vmovupd   %zmm16, (%rcx,%rax,8)                         #64.7 c13
+..LN72:
+        vcvtdq2pd %ymm5, %zmm6                                  #64.24 c13
+..LN73:
+        vmovupd   %zmm6, 64(%rcx,%rax,8)                        #64.7 c15
+..LN74:
+        .loc    1  62  is_stmt 1
+        addq      $16, %rax                                     #62.3 c15
+..LN75:
+        cmpl      $64, %edx                                     #62.3 c15
+..LN76:
+        jb        ..B1.11       # Prob 98%                      #62.3 c17
+..LN77:
+                                # LOE rax rcx edx r15d
+..B1.12:                        # Preds ..B1.11
+                                # Execution count [1.00e+00]
+..LN78:
+        .loc    1  69  is_stmt 1
+        movq      88(%rsp), %rbx                                #69.7 c1
+..LN79:
+        .loc    1  67  is_stmt 1
+        xorb      %cl, %cl                                      #67.3 c1
+..LN80:
+        .loc    1  69  is_stmt 1
+        vmovups   .L_2il0floatpacket.2(%rip), %zmm0             #69.31 c1
+..LN81:
+        .loc    1  67  is_stmt 1
+        xorl      %edx, %edx                                    #67.3 c1
+..LN82:
+        xorl      %eax, %eax                                    #67.3 c3
+..LN83:
+                                # LOE rax rbx edx r15d cl zmm0
+..B1.13:                        # Preds ..B1.13 ..B1.12
+                                # Execution count [4.00e+00]
+..LN84:
+        .loc    1  69  is_stmt 1
+        lea       120(%rdx), %edi                               #69.31 c1
+..LN85:
+        lea       136(%rdx), %esi                               #69.31 c1
+..LN86:
+        .loc    1  67  is_stmt 1
+        addb      $1, %cl                                       #67.3 c1
+..LN87:
+        .loc    1  69  is_stmt 1
+        vpbroadcastd %edi, %zmm2                                #69.31 c3
+..LN88:
+        vpbroadcastd %esi, %zmm1                                #69.31 c3
+..LN89:
+        vpaddd    .L_2il0floatpacket.8(%rip), %zmm2, %zmm10     #69.31 c9 stall 2
+..LN90:
+        vpaddd    .L_2il0floatpacket.8(%rip), %zmm1, %zmm9      #69.31 c9
+..LN91:
+        vextractf64x4 $1, %zmm10, %ymm4                         #69.31 c11
+..LN92:
+        vcvtdq2pd %ymm9, %zmm5                                  #69.31 c11
+..LN93:
+        vmovupd   %zmm5, (%rbx,%rax,8)                          #69.7 c13
+..LN94:
+        vpaddd    %zmm0, %zmm9, %zmm17                          #69.31 c13
+..LN95:
+        lea       135(%rdx), %r8d                               #69.31 c13
+..LN96:
+        vpaddd    %zmm0, %zmm10, %zmm18                         #69.31 c15
+..LN97:
+        lea       119(%rdx), %r9d                               #69.31 c15
+..LN98:
+        vcvtdq2pd %ymm4, %zmm8                                  #69.31 c15
+..LN99:
+        vmovupd   %zmm8, 192(%rbx,%rax,8)                       #69.7 c17
+..LN100:
+        vextractf64x4 $1, %zmm18, %ymm12                        #69.31 c17
+..LN101:
+        vpaddd    %zmm0, %zmm17, %zmm25                         #69.31 c17
+..LN102:
+        .loc    1  67  is_stmt 1
+        addl      $-2, %edx                                     #67.3 c17
+..LN103:
+        .loc    1  69  is_stmt 1
+        vpbroadcastd %r8d, %zmm4                                #69.31 c19
+..LN104:
+        vpaddd    %zmm0, %zmm18, %zmm26                         #69.31 c19
+..LN105:
+        vcvtdq2pd %ymm17, %zmm13                                #69.31 c19
+..LN106:
+        vmovupd   %zmm13, 256(%rbx,%rax,8)                      #69.7 c23 stall 1
+..LN107:
+        vextractf64x4 $1, %zmm26, %ymm20                        #69.31 c23
+..LN108:
+        vpbroadcastd %r9d, %zmm5                                #69.31 c25
+..LN109:
+        vpaddd    %zmm0, %zmm25, %zmm27                         #69.31 c25
+..LN110:
+        vcvtdq2pd %ymm12, %zmm16                                #69.31 c25
+..LN111:
+        vmovupd   %zmm16, 448(%rbx,%rax,8)                      #69.7 c29 stall 1
+..LN112:
+        vcvtdq2pd %ymm25, %zmm21                                #69.31 c29
+..LN113:
+        vmovupd   %zmm21, 512(%rbx,%rax,8)                      #69.7 c31
+..LN114:
+        vpaddd    %zmm0, %zmm26, %zmm29                         #69.31 c31
+..LN115:
+        vextractf64x4 $1, %zmm27, %ymm28                        #69.31 c33
+..LN116:
+        vextractf64x4 $1, %zmm9, %ymm3                          #69.31 c33
+..LN117:
+        vextractf64x4 $1, %zmm17, %ymm11                        #69.31 c35
+..LN118:
+        vextractf64x4 $1, %zmm25, %ymm19                        #69.31 c35
+..LN119:
+        vpaddd    .L_2il0floatpacket.8(%rip), %zmm4, %zmm12     #69.31 c35
+..LN120:
+        vpaddd    .L_2il0floatpacket.8(%rip), %zmm5, %zmm13     #69.31 c37
+..LN121:
+        vcvtdq2pd %ymm20, %zmm24                                #69.31 c37
+..LN122:
+        vmovupd   %zmm24, 704(%rbx,%rax,8)                      #69.7 c39
+..LN123:
+        vextractf64x4 $1, %zmm29, %ymm30                        #69.31 c39
+..LN124:
+        vpaddd    %zmm0, %zmm12, %zmm20                         #69.31 c41
+..LN125:
+        vpaddd    %zmm0, %zmm13, %zmm21                         #69.31 c41
+..LN126:
+        vcvtdq2pd %ymm28, %zmm1                                 #69.31 c45
+..LN127:
+        vmovupd   %zmm1, 832(%rbx,%rax,8)                       #69.7 c47
+..LN128:
+        vcvtdq2pd %ymm29, %zmm2                                 #69.31 c47
+..LN129:
+        vmovupd   %zmm2, 896(%rbx,%rax,8)                       #69.7 c49
+..LN130:
+        vpaddd    %zmm0, %zmm20, %zmm28                         #69.31 c49
+..LN131:
+        vpaddd    %zmm0, %zmm21, %zmm29                         #69.31 c51
+..LN132:
+        vcvtdq2pd %ymm3, %zmm6                                  #69.31 c51
+..LN133:
+        vmovupd   %zmm6, 64(%rbx,%rax,8)                        #69.7 c53
+..LN134:
+        vcvtdq2pd %ymm10, %zmm7                                 #69.31 c53
+..LN135:
+        vmovupd   %zmm7, 128(%rbx,%rax,8)                       #69.7 c55
+..LN136:
+        vcvtdq2pd %ymm11, %zmm14                                #69.31 c55
+..LN137:
+        vmovupd   %zmm14, 320(%rbx,%rax,8)                      #69.7 c59 stall 1
+..LN138:
+        vcvtdq2pd %ymm18, %zmm15                                #69.31 c59
+..LN139:
+        vmovupd   %zmm15, 384(%rbx,%rax,8)                      #69.7 c61
+..LN140:
+        vcvtdq2pd %ymm19, %zmm22                                #69.31 c61
+..LN141:
+        vmovupd   %zmm22, 576(%rbx,%rax,8)                      #69.7 c65 stall 1
+..LN142:
+        vcvtdq2pd %ymm26, %zmm23                                #69.31 c65
+..LN143:
+        vmovupd   %zmm23, 640(%rbx,%rax,8)                      #69.7 c67
+..LN144:
+        vcvtdq2pd %ymm27, %zmm31                                #69.31 c67
+..LN145:
+        vmovupd   %zmm31, 768(%rbx,%rax,8)                      #69.7 c71 stall 1
+..LN146:
+        vcvtdq2pd %ymm30, %zmm3                                 #69.31 c71
+..LN147:
+        vmovupd   %zmm3, 960(%rbx,%rax,8)                       #69.7 c73
+..LN148:
+        vpaddd    %zmm0, %zmm28, %zmm30                         #69.31 c73
+..LN149:
+        vpaddd    %zmm0, %zmm29, %zmm1                          #69.31 c73
+..LN150:
+        vextractf64x4 $1, %zmm12, %ymm6                         #69.31 c75
+..LN151:
+        vextractf64x4 $1, %zmm13, %ymm7                         #69.31 c75
+..LN152:
+        vextractf64x4 $1, %zmm20, %ymm14                        #69.31 c77
+..LN153:
+        vextractf64x4 $1, %zmm21, %ymm15                        #69.31 c77
+..LN154:
+        vextractf64x4 $1, %zmm28, %ymm22                        #69.31 c79
+..LN155:
+        vextractf64x4 $1, %zmm29, %ymm23                        #69.31 c79
+..LN156:
+        vcvtdq2pd %ymm30, %zmm2                                 #69.31 c81
+..LN157:
+        vmovupd   %zmm2, 1792(%rbx,%rax,8)                      #69.7 c83
+..LN158:
+        vextractf64x4 $1, %zmm30, %ymm31                        #69.31 c83
+..LN159:
+        vextractf64x4 $1, %zmm1, %ymm30                         #69.31 c83
+..LN160:
+        vcvtdq2pd %ymm12, %zmm8                                 #69.31 c93
+..LN161:
+        vmovupd   %zmm8, 1024(%rbx,%rax,8)                      #69.7 c95
+..LN162:
+        vcvtdq2pd %ymm6, %zmm9                                  #69.31 c95
+..LN163:
+        vmovupd   %zmm9, 1088(%rbx,%rax,8)                      #69.7 c97
+..LN164:
+        vcvtdq2pd %ymm13, %zmm10                                #69.31 c97
+..LN165:
+        vmovupd   %zmm10, 1152(%rbx,%rax,8)                     #69.7 c101 stall 1
+..LN166:
+        vcvtdq2pd %ymm7, %zmm11                                 #69.31 c101
+..LN167:
+        vmovupd   %zmm11, 1216(%rbx,%rax,8)                     #69.7 c103
+..LN168:
+        vcvtdq2pd %ymm20, %zmm16                                #69.31 c103
+..LN169:
+        vmovupd   %zmm16, 1280(%rbx,%rax,8)                     #69.7 c107 stall 1
+..LN170:
+        vcvtdq2pd %ymm14, %zmm17                                #69.31 c107
+..LN171:
+        vmovupd   %zmm17, 1344(%rbx,%rax,8)                     #69.7 c109
+..LN172:
+        vcvtdq2pd %ymm21, %zmm18                                #69.31 c109
+..LN173:
+        vmovupd   %zmm18, 1408(%rbx,%rax,8)                     #69.7 c113 stall 1
+..LN174:
+        vcvtdq2pd %ymm15, %zmm19                                #69.31 c113
+..LN175:
+        vmovupd   %zmm19, 1472(%rbx,%rax,8)                     #69.7 c115
+..LN176:
+        vcvtdq2pd %ymm28, %zmm24                                #69.31 c115
+..LN177:
+        vmovupd   %zmm24, 1536(%rbx,%rax,8)                     #69.7 c119 stall 1
+..LN178:
+        vcvtdq2pd %ymm22, %zmm25                                #69.31 c119
+..LN179:
+        vmovupd   %zmm25, 1600(%rbx,%rax,8)                     #69.7 c121
+..LN180:
+        vcvtdq2pd %ymm29, %zmm26                                #69.31 c121
+..LN181:
+        vmovupd   %zmm26, 1664(%rbx,%rax,8)                     #69.7 c125 stall 1
+..LN182:
+        vcvtdq2pd %ymm23, %zmm27                                #69.31 c125
+..LN183:
+        vmovupd   %zmm27, 1728(%rbx,%rax,8)                     #69.7 c127
+..LN184:
+        vcvtdq2pd %ymm31, %zmm3                                 #69.31 c127
+..LN185:
+        vmovupd   %zmm3, 1856(%rbx,%rax,8)                      #69.7 c131 stall 1
+..LN186:
+        vcvtdq2pd %ymm1, %zmm4                                  #69.31 c131
+..LN187:
+        vmovupd   %zmm4, 1920(%rbx,%rax,8)                      #69.7 c133
+..LN188:
+        vcvtdq2pd %ymm30, %zmm5                                 #69.31 c133
+..LN189:
+        vmovupd   %zmm5, 1984(%rbx,%rax,8)                      #69.7 c137 stall 1
+..LN190:
+        .loc    1  67  is_stmt 1
+        addq      $256, %rax                                    #67.3 c137
+..LN191:
+        cmpb      $4, %cl                                       #67.3 c137
+..LN192:
+        jb        ..B1.13       # Prob 75%                      #67.3 c139
+..LN193:
+                                # LOE rax rbx edx r15d cl zmm0
+..B1.14:                        # Preds ..B1.13
+                                # Execution count [1.00e+00]
+..LN194:
+        .loc    1  72  is_stmt 1
+        movq      96(%rsp), %rdx                                #72.3 c1
+..LN195:
+        movl      $512, %eax                                    #72.3 c1
+..LN196:
+                                # LOE rax rdx r15d
+..B1.43:                        # Preds ..B1.14
+                                # Execution count [1.00e+00]
+..LN197:
+        vpxord    %zmm0, %zmm0, %zmm0                           # c1
+..LN198:
+                                # LOE rax rdx r15d zmm0
+..B1.44:                        # Preds ..B1.44 ..B1.43
+                                # Execution count [2.00e+00]
+..LN199:
+        vmovups   %zmm0, -64(%rdx,%rax)                         #72.3 c1
+..LN200:
+        vmovups   %zmm0, -128(%rdx,%rax)                        #72.3 c1
+..LN201:
+        vmovups   %zmm0, -192(%rdx,%rax)                        #72.3 c7 stall 2
+..LN202:
+        vmovups   %zmm0, -256(%rdx,%rax)                        #72.3 c7
+..LN203:
+        subq      $256, %rax                                    #72.3 c7
+..LN204:
+        jne       ..B1.44       # Prob 50%                      #72.3 c9
+..LN205:
+                                # LOE rax rdx r15d zmm0
+..B1.15:                        # Preds ..B1.44
+                                # Execution count [1.00e+00]
+..LN206:
+        .loc    1  73  is_stmt 1
+        movq      104(%rsp), %rdi                               #73.3 c1
+..LN207:
+        movq      80(%rsp), %rsi                                #73.3 c1
+..LN208:
+        movl      $8192, %edx                                   #73.3 c1
+..LN209:
+        call      __intel_mic_avx512f_memcpy                    #73.3 c3
+..LN210:
+                                # LOE r15d
+..B1.16:                        # Preds ..B1.15
+                                # Execution count [1.00e+00]
+..LN211:
+        .loc    1  74  is_stmt 1
+        movq      112(%rsp), %rdi                               #74.3 c1
+..LN212:
+        movq      88(%rsp), %rsi                                #74.3 c1
+..LN213:
+        movl      $8192, %edx                                   #74.3 c1
+..LN214:
+        call      __intel_mic_avx512f_memcpy                    #74.3 c3
+..LN215:
+                                # LOE r15d
+..B1.17:                        # Preds ..B1.16
+                                # Execution count [1.00e+00]
+..LN216:
+        .loc    1  75  is_stmt 1
+        movq      120(%rsp), %rdx                               #75.3 c1
+..LN217:
+        movl      $512, %eax                                    #75.3 c1
+..LN218:
+                                # LOE rax rdx r15d
+..B1.46:                        # Preds ..B1.17
+                                # Execution count [1.00e+00]
+..LN219:
+        vpxord    %zmm0, %zmm0, %zmm0                           # c1
+..LN220:
+                                # LOE rax rdx r15d zmm0
+..B1.47:                        # Preds ..B1.47 ..B1.46
+                                # Execution count [2.00e+00]
+..LN221:
+        vmovups   %zmm0, -64(%rdx,%rax)                         #75.3 c1
+..LN222:
+        vmovups   %zmm0, -128(%rdx,%rax)                        #75.3 c1
+..LN223:
+        vmovups   %zmm0, -192(%rdx,%rax)                        #75.3 c7 stall 2
+..LN224:
+        vmovups   %zmm0, -256(%rdx,%rax)                        #75.3 c7
+..LN225:
+        subq      $256, %rax                                    #75.3 c7
+..LN226:
+        jne       ..B1.47       # Prob 50%                      #75.3 c9
+..LN227:
+                                # LOE rax rdx r15d zmm0
+..B1.18:                        # Preds ..B1.47
+                                # Execution count [1.00e+00]
+..LN228:
+        .loc    1  80  is_stmt 1
+        movq      80(%rsp), %r12                                #80.11
+..LN229:
+        movq      88(%rsp), %rbx                                #80.14
+..LN230:
+        movq      96(%rsp), %r13                                #80.17
+..LN231:
+        movq      %r12, %rdi                                    #80.5
+..LN232:
+        movq      %rbx, %rsi                                    #80.5
+..LN233:
+        movq      %r13, %rdx                                    #80.5
+..___tag_value_main.11:
+..LN234:
+#       dgemm(double *, double *, double *)
+        call      _Z5dgemmPdS_S_                                #80.5
+..___tag_value_main.12:
+..LN235:
+                                # LOE rbx r12 r13 r15d
+..B1.19:                        # Preds ..B1.18
+                                # Execution count [1.00e+00]
+..LN236:
+        .loc    1  81  is_stmt 1
+        movq      120(%rsp), %r14                               #81.31
+..LN237:
+        movq      104(%rsp), %rdi                               #81.5
+..LN238:
+        movq      112(%rsp), %rsi                               #81.5
+..LN239:
+        movq      %r14, %rdx                                    #81.5
+..___tag_value_main.13:
+..LN240:
+#       dgemm_opt(double *, double *, double *)
+        call      _Z9dgemm_optPdS_S_                            #81.5
+..___tag_value_main.14:
+..LN241:
+                                # LOE rbx r12 r13 r14 r15d
+..B1.20:                        # Preds ..B1.19
+                                # Execution count [1.00e+00]
+..LN242:
+        .loc    1  87  is_stmt 1
+        vpxorq    %zmm1, %zmm1, %zmm1                           #87.5 c1
+..LN243:
+        .loc    1  85  is_stmt 1
+        xorl      %eax, %eax                                    #85.3 c1
+..LN244:
+        .loc    1  87  is_stmt 1
+        vmovaps   %zmm1, %zmm0                                  #87.5 c3
+..LN245:
+                                # LOE rax rbx r12 r13 r14 r15d zmm0 zmm1
+..B1.21:                        # Preds ..B1.21 ..B1.20
+                                # Execution count [6.40e+01]
+..LN246:
+        .loc    1  86  is_stmt 1
+        vmovups   (%r13,%rax,8), %zmm2                          #86.19 c1
+..LN247:
+        vmovups   64(%r13,%rax,8), %zmm3                        #86.19 c1
+..LN248:
+        vsubpd    (%r14,%rax,8), %zmm2, %zmm4                   #86.26 c7 stall 2
+..LN249:
+        vsubpd    64(%r14,%rax,8), %zmm3, %zmm5                 #86.26 c7
+..LN250:
+        .loc    1  85  is_stmt 1
+        addq      $16, %rax                                     #85.3 c7
+..LN251:
+        .loc    1  87  is_stmt 1
+        vfmadd231pd %zmm4, %zmm4, %zmm1                         #87.5 c13 stall 2
+..LN252:
+        vfmadd231pd %zmm5, %zmm5, %zmm0                         #87.5 c13
+..LN253:
+        .loc    1  85  is_stmt 1
+        cmpq      $64, %rax                                     #85.3 c13
+..LN254:
+        jb        ..B1.21       # Prob 98%                      #85.3 c15
+..LN255:
+                                # LOE rax rbx r12 r13 r14 r15d zmm0 zmm1
+..B1.22:                        # Preds ..B1.21
+                                # Execution count [1.00e+00]
+..LN256:
+        .loc    1  89  is_stmt 1
+        vxorpd    %xmm6, %xmm6, %xmm6                           #89.3 c1
+..LN257:
+        vmovsd    .L_2il0floatpacket.9(%rip), %xmm22            #89.3 c1
+..LN258:
+        .loc    1  87  is_stmt 1
+        vaddpd    %zmm0, %zmm1, %zmm0                           #87.5 c5 stall 1
+..LN259:
+        vextractf64x4 $1, %zmm0, %ymm1                          #87.5 c11 stall 2
+..LN260:
+        vaddpd    %ymm0, %ymm1, %ymm2                           #87.5 c13
+..LN261:
+        valignq   $3, %zmm2, %zmm2, %zmm16                      #87.5 c21
+..LN262:
+        valignq   $2, %zmm2, %zmm2, %zmm17                      #87.5 c21
+..LN263:
+        valignq   $1, %zmm2, %zmm2, %zmm18                      #87.5 c23
+..LN264:
+        vaddsd    %xmm18, %xmm17, %xmm3                         #87.5 c27
+..LN265:
+        vaddsd    %xmm2, %xmm16, %xmm4                          #87.5 c29
+..LN266:
+        vaddsd    %xmm4, %xmm3, %xmm19                          #87.5 c33 stall 1
+..LN267:
+        .loc    1  89  is_stmt 1
+        vmovsd    %xmm19, %xmm6, %xmm24                         #89.3 c39 stall 2
+..LN268:
+        vcmpsd    $1, .L_2il0floatpacket.9(%rip), %xmm24, %k1   #89.3 c41
+..LN269:
+        vmovapd   %zmm24, %zmm5                                 #89.3 c41
+..LN270:
+        vscalefsd .L_2il0floatpacket.10(%rip), %xmm24, %xmm5{%k1} #89.3 c43
+..LN271:
+        vrsqrt28sd {sae}, %xmm5, %xmm5, %xmm20                  #89.3 c43
+..LN272:
+        vmulsd    {rn-sae}, %xmm5, %xmm20, %xmm23               #89.3 c51 stall 3
+..LN273:
+        vscalefsd .L_2il0floatpacket.11(%rip), %xmm20, %xmm21   #89.3 c51
+..LN274:
+        vfnmadd231sd {rn-sae}, %xmm21, %xmm23, %xmm22           #89.3 c57 stall 2
+..LN275:
+        vfmadd231sd {rn-sae}, %xmm23, %xmm22, %xmm23            #89.3 c63 stall 2
+..LN276:
+        vfmadd213sd {rn-sae}, %xmm21, %xmm21, %xmm22            #89.3 c63
+..LN277:
+        vfnmadd231sd {rn-sae}, %xmm23, %xmm23, %xmm5            #89.3 c69 stall 2
+..LN278:
+        vfmadd213sd %xmm23, %xmm22, %xmm5                       #89.3 c75 stall 2
+..LN279:
+        vmovsd    %xmm5, %xmm6, %xmm0                           #89.3 c81 stall 2
+..LN280:
+        vscalefsd .L_2il0floatpacket.12(%rip), %xmm0, %xmm0{%k1} #89.3 c83
+..LN281:
+        vfixupimmsd $112, .L_2il0floatpacket.13(%rip), %xmm24, %xmm0 #89.3 c89 stall 2
+..LN282:
+        .loc    1  90  is_stmt 1
+        vcmpsd    $14, .L_2il0floatpacket.3(%rip), %xmm0, %k0   #90.15 c89
+..LN283:
+        kortestw  %k0, %k0                                      #90.15 c91
+..LN284:
+        je        ..B1.25       # Prob 11%                      #90.15 c93
+..LN285:
+                                # LOE rbx r12 r13 r15d xmm0
+..B1.23:                        # Preds ..B1.22
+                                # Execution count [8.81e-01]
+..LN286:
+        .loc    1  91  is_stmt 1
+        movl      $.L_2__STRING.0, %edi                         #91.5 c1
+..LN287:
+        movl      $1, %eax                                      #91.5 c1
+..___tag_value_main.15:
+..LN288:
+#       printf(const char *, ...)
+        call      printf                                        #91.5
+..___tag_value_main.16:
+..LN289:
+                                # LOE
+..B1.24:                        # Preds ..B1.23
+                                # Execution count [8.81e-01]
+..LN290:
+        .loc    1  92  is_stmt 1
+        movq      56(%rsp), %rbx                                #92.12[spill] c1
+        .cfi_restore 3
+..LN291:
+        movq      48(%rsp), %r12                                #92.12[spill] c1
+        .cfi_restore 12
+..LN292:
+        movl      $-1, %eax                                     #92.12 c1
+..LN293:
+        movq      40(%rsp), %r13                                #92.12[spill] c5 stall 1
+        .cfi_restore 13
+..LN294:
+        movq      72(%rsp), %r14                                #92.12[spill] c5
+        .cfi_restore 14
+..LN295:
+        movq      64(%rsp), %r15                                #92.12[spill] c9 stall 1
+        .cfi_restore 15
+..LN296:
+        movq      %rbp, %rsp                                    #92.12 c11
+..LN297:
+        popq      %rbp                                          #92.12
+        .cfi_def_cfa 7, 8
+        .cfi_restore 6
+..LN298:
+        ret                                                     #92.12
+        .cfi_def_cfa 6, 16
+        .cfi_escape 0x10, 0x03, 0x0e, 0x38, 0x1c, 0x0d, 0x80, 0xff, 0xff, 0xff, 0x1a, 0x0d, 0xb8, 0xff, 0xff, 0xff, 0x22
+        .cfi_offset 6, -16
+        .cfi_escape 0x10, 0x0c, 0x0e, 0x38, 0x1c, 0x0d, 0x80, 0xff, 0xff, 0xff, 0x1a, 0x0d, 0xb0, 0xff, 0xff, 0xff, 0x22
+        .cfi_escape 0x10, 0x0d, 0x0e, 0x38, 0x1c, 0x0d, 0x80, 0xff, 0xff, 0xff, 0x1a, 0x0d, 0xa8, 0xff, 0xff, 0xff, 0x22
+        .cfi_escape 0x10, 0x0e, 0x0e, 0x38, 0x1c, 0x0d, 0x80, 0xff, 0xff, 0xff, 0x1a, 0x0d, 0xc8, 0xff, 0xff, 0xff, 0x22
+        .cfi_escape 0x10, 0x0f, 0x0e, 0x38, 0x1c, 0x0d, 0x80, 0xff, 0xff, 0xff, 0x1a, 0x0d, 0xc0, 0xff, 0xff, 0xff, 0x22
+..LN299:
+                                # LOE
+..B1.25:                        # Preds ..B1.22
+                                # Execution count [1.19e-01]: Infreq
+..LN300:
+        .loc    1  98  is_stmt 1
+        movq      %r12, %rdi                                    #98.3
+..LN301:
+        movq      %rbx, %rsi                                    #98.3
+..LN302:
+        movq      %r13, %rdx                                    #98.3
+..___tag_value_main.31:
+..LN303:
+#       dgemm_opt(double *, double *, double *)
+        call      _Z9dgemm_optPdS_S_                            #98.3
+..___tag_value_main.32:
+..LN304:
+                                # LOE r15d
+..B1.26:                        # Preds ..B1.25
+                                # Execution count [1.19e-01]: Infreq
+..LN305:
+        .file   3 "Stopwatch.h"
+        .loc    3  27  is_stmt 1
+        movl      $1, %edi                                      #27.5 c1
+..LN306:
+        .loc    1  100  is_stmt 1
+        movq      $0, (%rsp)                                    #100.13 c1
+..LN307:
+        .loc    3  27  is_stmt 1
+        lea       8(%rsp), %rsi                                 #27.5 c1
+..LN308:
+#       clock_gettime(clockid_t, timespec *)
+        call      clock_gettime                                 #27.5 c3
+..LN309:
+                                # LOE r15d
+..B1.27:                        # Preds ..B1.26
+                                # Execution count [1.19e-01]: Infreq
+..LN310:
+        .loc    1  104  is_stmt 1
+        xorl      %ebx, %ebx                                    #104.14 c1
+..LN311:
+        testl     %r15d, %r15d                                  #104.23 c1
+..LN312:
+        jle       ..B1.32       # Prob 10%                      #104.23 c3
+..LN313:
+                                # LOE ebx r15d
+..B1.29:                        # Preds ..B1.27 ..B1.51
+                                # Execution count [5.96e-01]: Infreq
+..LN314:
+        .loc    1  105  is_stmt 1
+        movq      80(%rsp), %rdi                                #105.5
+..LN315:
+        movq      88(%rsp), %rsi                                #105.5
+..LN316:
+        movq      96(%rsp), %rdx                                #105.5
+..___tag_value_main.33:
+..LN317:
+#       dgemm_opt(double *, double *, double *)
+        call      _Z9dgemm_optPdS_S_                            #105.5
+..___tag_value_main.34:
+..LN318:
+                                # LOE ebx r15d
+..B1.30:                        # Preds ..B1.29
+                                # Execution count [5.96e-01]: Infreq
+# Begin ASM
+..LN319:
+# End ASM
+                                # LOE ebx r15d
+..B1.51:                        # Preds ..B1.30
+                                # Execution count [5.96e-01]: Infreq
+..LN320:
+        .loc    1  104  is_stmt 1
+        addl      $1, %ebx                                      #104.38 c1
+..LN321:
+        cmpl      %r15d, %ebx                                   #104.23 c3
+..LN322:
+        jl        ..B1.29       # Prob 82%                      #104.23 c5
+..LN323:
+                                # LOE ebx r15d
+..B1.32:                        # Preds ..B1.51 ..B1.27
+                                # Execution count [1.19e-01]: Infreq
+..LN324:
+        .loc    3  38  is_stmt 1
+        movl      $1, %edi                                      #38.5 c1
+..LN325:
+        lea       24(%rsp), %rsi                                #38.5 c1
+..LN326:
+#       clock_gettime(clockid_t, timespec *)
+        call      clock_gettime                                 #38.5 c3
+..LN327:
+                                # LOE r15d
+..B1.33:                        # Preds ..B1.32
+                                # Execution count [1.19e-01]: Infreq
+..LN328:
+        .loc    3  39  is_stmt 1
+        movq      24(%rsp), %rdx                                #39.24 c1
+..LN329:
+        movq      32(%rsp), %rcx                                #39.24 c1
+..LN330:
+        .loc    1  110  is_stmt 1
+        vcvtsi2sd %r15d, %xmm17, %xmm17                         #110.49 c1
+..LN331:
+        movl      $.L_2__STRING.1, %edi                         #110.3 c1
+..LN332:
+        movl      $2, %eax                                      #110.3 c1
+..LN333:
+        vaddsd    %xmm17, %xmm17, %xmm18                        #110.3 c3
+..LN334:
+        .loc    3  12  is_stmt 1
+        subq      8(%rsp), %rdx                                 #12.27 c5
+..LN335:
+        subq      16(%rsp), %rcx                                #12.58 c5
+..LN336:
+        imulq     $1000000000, %rdx, %rbx                       #12.40 c7
+..LN337:
+        .loc    1  110  is_stmt 1
+        vmovsd    .L_2il0floatpacket.14(%rip), %xmm23           #110.3 c7
+..LN338:
+        vmulsd    .L_2il0floatpacket.6(%rip), %xmm18, %xmm19    #110.3 c9
+..LN339:
+        .loc    3  39  is_stmt 1
+        addq      (%rsp), %rbx                                  #39.5 c13 stall 1
+..LN340:
+        .loc    1  109  is_stmt 1
+        movq      $0, (%rsp)                                    #109.17 c15
+..LN341:
+        .loc    3  12  is_stmt 1
+        addq      %rcx, %rbx                                    #12.58 c15
+..LN342:
+        .loc    1  110  is_stmt 1
+        vgetmantsd $0, %xmm19, %xmm19, %xmm25                   #110.3 c15
+..LN343:
+        vgetexpsd %xmm19, %xmm19, %xmm21                        #110.3 c15
+..LN344:
+        .loc    3  16  is_stmt 1
+        vcvtsi2sdq %rbx, %xmm16, %xmm16                         #16.21 c21 stall 2
+..LN345:
+        vmulsd    .L_2il0floatpacket.4(%rip), %xmm16, %xmm20    #16.21 c23
+..LN346:
+        .loc    1  110  is_stmt 1
+        vgetmantsd $0, %xmm20, %xmm20, %xmm24                   #110.3 c29 stall 2
+..LN347:
+        vgetexpsd %xmm20, %xmm20, %xmm22                        #110.3 c29
+..LN348:
+        vmulsd    .L_2il0floatpacket.5(%rip), %xmm20, %xmm0     #110.3 c29
+..LN349:
+        vrcp28sd  %xmm24, %xmm24, %xmm26                        #110.3 c35 stall 2
+..LN350:
+        vsubsd    %xmm22, %xmm21, %xmm28                        #110.3 c35
+..LN351:
+        vmulsd    {rn-sae}, %xmm25, %xmm26, %xmm27              #110.3 c43 stall 3
+..LN352:
+        vfnmadd231sd {rn-sae}, %xmm24, %xmm26, %xmm23           #110.3 c43
+..LN353:
+        vfmadd231sd {rn-sae}, %xmm26, %xmm23, %xmm26            #110.3 c49 stall 2
+..LN354:
+        vfnmadd231sd {rn-sae}, %xmm24, %xmm27, %xmm25           #110.3 c49
+..LN355:
+        vfmadd231sd {rn-sae}, %xmm26, %xmm25, %xmm27            #110.3 c55 stall 2
+..LN356:
+        vscalefsd %xmm28, %xmm27, %xmm29                        #110.3 c61 stall 2
+..LN357:
+        vmulsd    .L_2il0floatpacket.4(%rip), %xmm29, %xmm1     #110.3 c67 stall 2
+..___tag_value_main.35:
+..LN358:
+#       printf(const char *, ...)
+        call      printf                                        #110.3
+..___tag_value_main.36:
+..LN359:
+                                # LOE
+..B1.34:                        # Preds ..B1.33
+                                # Execution count [1.19e-01]: Infreq
+..LN360:
+        .loc    1  114  is_stmt 1
+        movq      80(%rsp), %rdi                                #114.3 c1
+..LN361:
+#       free(void *)
+        call      free                                          #114.3 c3
+..LN362:
+                                # LOE
+..B1.35:                        # Preds ..B1.34
+                                # Execution count [1.19e-01]: Infreq
+..LN363:
+        movq      88(%rsp), %rdi                                #114.12 c1
+..LN364:
+#       free(void *)
+        call      free                                          #114.12 c3
+..LN365:
+                                # LOE
+..B1.36:                        # Preds ..B1.35
+                                # Execution count [1.19e-01]: Infreq
+..LN366:
+        movq      96(%rsp), %rdi                                #114.21 c1
+..LN367:
+#       free(void *)
+        call      free                                          #114.21 c3
+..LN368:
+                                # LOE
+..B1.37:                        # Preds ..B1.36
+                                # Execution count [1.19e-01]: Infreq
+..LN369:
+        .loc    1  115  is_stmt 1
+        movq      104(%rsp), %rdi                               #115.3 c1
+..LN370:
+#       free(void *)
+        call      free                                          #115.3 c3
+..LN371:
+                                # LOE
+..B1.38:                        # Preds ..B1.37
+                                # Execution count [1.19e-01]: Infreq
+..LN372:
+        movq      112(%rsp), %rdi                               #115.17 c1
+..LN373:
+#       free(void *)
+        call      free                                          #115.17 c3
+..LN374:
+                                # LOE
+..B1.39:                        # Preds ..B1.38
+                                # Execution count [1.19e-01]: Infreq
+..LN375:
+        movq      120(%rsp), %rdi                               #115.31 c1
+..LN376:
+#       free(void *)
+        call      free                                          #115.31 c3
+..LN377:
+                                # LOE
+..B1.40:                        # Preds ..B1.39
+                                # Execution count [1.19e-01]: Infreq
+..LN378:
+        .loc    1  117  is_stmt 1
+        movq      56(%rsp), %rbx                                #117.10[spill] c1
+        .cfi_restore 3
+..LN379:
+        movq      48(%rsp), %r12                                #117.10[spill] c1
+        .cfi_restore 12
+..LN380:
+        xorl      %eax, %eax                                    #117.10 c1
+..LN381:
+        movq      40(%rsp), %r13                                #117.10[spill] c5 stall 1
+        .cfi_restore 13
+..LN382:
+        movq      72(%rsp), %r14                                #117.10[spill] c5
+        .cfi_restore 14
+..LN383:
+        movq      64(%rsp), %r15                                #117.10[spill] c9 stall 1
+        .cfi_restore 15
+..LN384:
+        movq      %rbp, %rsp                                    #117.10 c11
+..LN385:
+        popq      %rbp                                          #117.10
+        .cfi_def_cfa 7, 8
+        .cfi_restore 6
+..LN386:
+        ret                                                     #117.10
+        .align    16,0x90
+..LN387:
+                                # LOE
+..LN388:
+        .cfi_endproc
+# mark_end;
+        .type   main,@function
+        .size   main,.-main
+..LNmain.389:
+.LNmain:
+        .data
+# -- End  main
+        .text
+.L_2__routine_start__Z9dgemm_optPdS_S__1:
+# -- Begin  _Z9dgemm_optPdS_S_
+        .text
+# mark_begin;
+# Threads 2
+        .align    16,0x90
+        .globl _Z9dgemm_optPdS_S_
+# --- dgemm_opt(double *, double *, double *)
+_Z9dgemm_optPdS_S_:
+# parameter 1(A): %rdi
+# parameter 2(B): %rsi
+# parameter 3(C): %rdx
+..B2.1:                         # Preds ..B2.0
+                                # Execution count [1.00e+00]
+        .cfi_startproc
+        .cfi_personality 0x3,__gxx_personality_v0
+..___tag_value__Z9dgemm_optPdS_S_.45:
+..L46:
+                                                         #20.49
+..LN390:
+        .loc    1  20  is_stmt 1
+        movq      %rdx, %rcx                                    #20.49 c1
+..LN391:
+        .loc    1  26  is_stmt 1
+        vmovdqu32 .L_2il0floatpacket.15(%rip), %zmm2            #26.3 c1
+..LN392:
+        xorb      %dl, %dl                                      #26.3 c3
+..LN393:
+        xorl      %eax, %eax                                    #26.3 c3
+..LN394:
+                                # LOE rax rcx rbx rbp rsi rdi r12 r13 r14 r15 dl zmm2
+..B2.2:                         # Preds ..B2.6 ..B2.1
+                                # Execution count [8.00e+00]
+..LN395:
+        .loc    1  35  is_stmt 1
+        movb      %dl, %r8b                                     #35.9 c1
+..LN396:
+        shlb      $3, %r8b                                      #35.9 c3
+..LN397:
+        movzbl    %r8b, %r8d                                    #35.9 c5
+..LN398:
+        .loc    1  34  is_stmt 1
+        prefetcht0 (%rcx,%r8,8)                                 #34.10 c7
+..LN399:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k1                                 #35.23 c7
+..LN400:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c7
+..LN401:
+        vpxord    %zmm19, %zmm19, %zmm19                        #35.23 c7
+..LN402:
+        vpxord    %zmm21, %zmm21, %zmm21                        #35.23 c7
+..LN403:
+        vmovups   (%rsi,%rax,8), %zmm23                         #35.36 c7
+..LN404:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c9
+..LN405:
+        kxnorw    %k0, %k0, %k4                                 #35.23 c9
+..LN406:
+        vpxord    %zmm24, %zmm24, %zmm24                        #35.23 c9
+..LN407:
+        vpxord    %zmm26, %zmm26, %zmm26                        #35.23 c9
+..LN408:
+        vmovups   64(%rsi,%rax,8), %zmm25                       #35.36 c9
+..LN409:
+        vgatherdpd 1024(%rdi,%ymm2,8), %zmm19{%k3}              #35.23 c13 stall 1
+..LN410:
+        vgatherdpd 1536(%rdi,%ymm2,8), %zmm21{%k4}              #35.23 c15
+..LN411:
+        vgatherdpd (%rdi,%ymm2,8), %zmm24{%k1}                  #35.23 c19 stall 1
+..LN412:
+        vgatherdpd 512(%rdi,%ymm2,8), %zmm26{%k2}               #35.23 c21
+..LN413:
+        .loc    1  34  is_stmt 1
+        prefetcht0 (%rcx,%r8,8)                                 #34.10 c25 stall 1
+..LN414:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k5                                 #35.23 c25
+..LN415:
+        vpxord    %zmm28, %zmm28, %zmm28                        #35.23 c25
+..LN416:
+        vpxord    %zmm30, %zmm30, %zmm30                        #35.23 c25
+..LN417:
+        kxnorw    %k0, %k0, %k6                                 #35.23 c25
+..LN418:
+        vmovups   128(%rsi,%rax,8), %zmm20                      #35.36 c27
+..LN419:
+        vmovups   192(%rsi,%rax,8), %zmm22                      #35.36 c27
+..LN420:
+        vmulpd    %zmm20, %zmm19, %zmm18                        #35.36 c33 stall 2
+..LN421:
+        vmulpd    %zmm22, %zmm21, %zmm19                        #35.36 c33
+..LN422:
+        vmovups   256(%rsi,%rax,8), %zmm27                      #35.36 c33
+..LN423:
+        vgatherdpd 2048(%rdi,%ymm2,8), %zmm28{%k5}              #35.23 c33
+..LN424:
+        vfmadd231pd %zmm24, %zmm23, %zmm18                      #35.9 c39 stall 2
+..LN425:
+        vfmadd231pd %zmm26, %zmm25, %zmm19                      #35.9 c39
+..LN426:
+        vgatherdpd 2560(%rdi,%ymm2,8), %zmm30{%k6}              #35.23 c39
+..LN427:
+        .loc    1  34  is_stmt 1
+        prefetcht0 (%rcx,%r8,8)                                 #34.10 c39
+..LN428:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k7                                 #35.23 c39
+..LN429:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c39
+..LN430:
+        vmovups   320(%rsi,%rax,8), %zmm29                      #35.36 c41
+..LN431:
+        vpxord    %zmm0, %zmm0, %zmm0                           #35.23 c45 stall 1
+..LN432:
+        vpxord    %zmm3, %zmm3, %zmm3                           #35.23 c45
+..LN433:
+        vmovups   384(%rsi,%rax,8), %zmm31                      #35.36 c45
+..LN434:
+        vfmadd231pd %zmm28, %zmm27, %zmm18                      #35.9 c47
+..LN435:
+        vfmadd231pd %zmm30, %zmm29, %zmm19                      #35.9 c47
+..LN436:
+        vmovups   448(%rsi,%rax,8), %zmm1                       #35.36 c47
+..LN437:
+        vgatherdpd 3072(%rdi,%ymm2,8), %zmm0{%k7}               #35.23 c51 stall 1
+..LN438:
+        vgatherdpd 3584(%rdi,%ymm2,8), %zmm3{%k1}               #35.23 c53
+..LN439:
+        vfmadd231pd %zmm0, %zmm31, %zmm18                       #35.9 c57 stall 1
+..LN440:
+        vfmadd231pd %zmm3, %zmm1, %zmm19                        #35.9 c59
+..LN441:
+        .loc    1  34  is_stmt 1
+        prefetcht0 (%rcx,%r8,8)                                 #34.10 c59
+..LN442:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k2                                 #35.23 c59
+..LN443:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c59
+..LN444:
+        vmovups   512(%rsi,%rax,8), %zmm4                       #35.36 c59
+..LN445:
+        vmovups   576(%rsi,%rax,8), %zmm6                       #35.36 c61
+..LN446:
+        kxnorw    %k0, %k0, %k4                                 #35.23 c61
+..LN447:
+        vpxord    %zmm5, %zmm5, %zmm5                           #35.23 c63
+..LN448:
+        vpxord    %zmm7, %zmm7, %zmm7                           #35.23 c65
+..LN449:
+        vpxord    %zmm9, %zmm9, %zmm9                           #35.23 c65
+..LN450:
+        vgatherdpd 4096(%rdi,%ymm2,8), %zmm5{%k2}               #35.23 c65
+..LN451:
+        vgatherdpd 4608(%rdi,%ymm2,8), %zmm7{%k3}               #35.23 c67
+..LN452:
+        vfmadd231pd %zmm5, %zmm4, %zmm18                        #35.9 c71 stall 1
+..LN453:
+        vgatherdpd 5120(%rdi,%ymm2,8), %zmm9{%k4}               #35.23 c71
+..LN454:
+        vfmadd231pd %zmm7, %zmm6, %zmm19                        #35.9 c73
+..LN455:
+        .loc    1  34  is_stmt 1
+        prefetcht0 (%rcx,%r8,8)                                 #34.10 c73
+..LN456:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k5                                 #35.23 c73
+..LN457:
+        kxnorw    %k0, %k0, %k6                                 #35.23 c73
+..LN458:
+        vmovups   640(%rsi,%rax,8), %zmm8                       #35.36 c75
+..LN459:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c75
+..LN460:
+        vpxord    %zmm11, %zmm11, %zmm11                        #35.23 c77
+..LN461:
+        vmovups   704(%rsi,%rax,8), %zmm10                      #35.36 c77
+..LN462:
+        vpxord    %zmm13, %zmm13, %zmm13                        #35.23 c79
+..LN463:
+        vpxord    %zmm15, %zmm15, %zmm15                        #35.23 c79
+..LN464:
+        vfmadd231pd %zmm9, %zmm8, %zmm18                        #35.9 c81
+..LN465:
+        vgatherdpd 5632(%rdi,%ymm2,8), %zmm11{%k5}              #35.23 c81
+..LN466:
+        vgatherdpd 6144(%rdi,%ymm2,8), %zmm13{%k6}              #35.23 c83
+..LN467:
+        vfmadd231pd %zmm11, %zmm10, %zmm19                      #35.9 c87 stall 1
+..LN468:
+        vgatherdpd 6656(%rdi,%ymm2,8), %zmm15{%k1}              #35.23 c87
+..LN469:
+        .loc    1  34  is_stmt 1
+        prefetcht0 (%rcx,%r8,8)                                 #34.10 c89
+..LN470:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k2                                 #35.23 c89
+..LN471:
+        vpxord    %zmm17, %zmm17, %zmm17                        #35.23 c89
+..LN472:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c89
+..LN473:
+        vmovups   768(%rsi,%rax,8), %zmm12                      #35.36 c91
+..LN474:
+        vpxord    %zmm24, %zmm24, %zmm24                        #35.23 c91
+..LN475:
+        vmovups   832(%rsi,%rax,8), %zmm14                      #35.36 c93
+..LN476:
+        vfmadd231pd %zmm13, %zmm12, %zmm18                      #35.9 c97 stall 1
+..LN477:
+        vmovups   896(%rsi,%rax,8), %zmm16                      #35.36 c97
+..LN478:
+        vfmadd231pd %zmm15, %zmm14, %zmm19                      #35.9 c99
+..LN479:
+        vmovups   960(%rsi,%rax,8), %zmm23                      #35.36 c99
+..LN480:
+        vgatherdpd 7168(%rdi,%ymm2,8), %zmm17{%k2}              #35.23 c103 stall 1
+..LN481:
+        vgatherdpd 7680(%rdi,%ymm2,8), %zmm24{%k3}              #35.23 c105
+..LN482:
+        vfmadd231pd %zmm17, %zmm16, %zmm18                      #35.9 c109 stall 1
+..LN483:
+        .loc    1  34  is_stmt 1
+        prefetcht0 (%rcx,%r8,8)                                 #34.10 c109
+..LN484:
+        .loc    1  35  is_stmt 1
+        vfmadd231pd %zmm24, %zmm23, %zmm19                      #35.9 c111
+..LN485:
+        vaddpd    %zmm19, %zmm18, %zmm0                         #35.9 c117 stall 2
+..LN486:
+        vextractf64x4 $1, %zmm0, %ymm1                          #35.9 c123 stall 2
+..LN487:
+        vaddpd    %ymm0, %ymm1, %ymm3                           #35.9 c125
+..LN488:
+        valignq   $3, %zmm3, %zmm3, %zmm18                      #35.9 c133
+..LN489:
+        valignq   $2, %zmm3, %zmm3, %zmm20                      #35.9 c133
+..LN490:
+        valignq   $1, %zmm3, %zmm3, %zmm21                      #35.9 c135
+..LN491:
+        .loc    1  34  is_stmt 1
+        prefetcht0 (%rcx,%r8,8)                                 #34.10 c139
+..LN492:
+        .loc    1  35  is_stmt 1
+        vaddsd    %xmm21, %xmm20, %xmm4                         #35.9 c139
+..LN493:
+        kxnorw    %k0, %k0, %k4                                 #35.23 c139
+..LN494:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c139
+..LN495:
+        vaddsd    %xmm3, %xmm18, %xmm5                          #35.9 c141
+..LN496:
+        vaddsd    %xmm5, %xmm4, %xmm22                          #35.9 c145 stall 1
+..LN497:
+        vpxord    %zmm31, %zmm31, %zmm31                        #35.23 c147
+..LN498:
+        vpxord    %zmm7, %zmm7, %zmm7                           #35.23 c149
+..LN499:
+        vaddsd    (%rcx,%r8,8), %xmm22, %xmm25                  #35.9 c151
+..LN500:
+        vmovsd    %xmm25, (%rcx,%r8,8)                          #35.9 c157 stall 2
+..LN501:
+        vgatherdpd 520(%rdi,%ymm2,8), %zmm7{%k5}                #35.23 c157
+..LN502:
+        vgatherdpd 8(%rdi,%ymm2,8), %zmm31{%k4}                 #35.23 c163 stall 2
+..LN503:
+        .loc    1  34  is_stmt 1
+        prefetcht0 8(%rcx,%r8,8)                                #34.10 c163
+..LN504:
+        .loc    1  35  is_stmt 1
+        vpxord    %zmm26, %zmm26, %zmm26                        #35.23 c163
+..LN505:
+        kxnorw    %k0, %k0, %k7                                 #35.23 c163
+..LN506:
+        vpxord    %zmm28, %zmm28, %zmm28                        #35.23 c163
+..LN507:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c163
+..LN508:
+        vmovups   128(%rsi,%rax,8), %zmm27                      #35.36 c165
+..LN509:
+        vmovups   192(%rsi,%rax,8), %zmm29                      #35.36 c169 stall 1
+..LN510:
+        vmovups   (%rsi,%rax,8), %zmm30                         #35.36 c171
+..LN511:
+        vmovups   64(%rsi,%rax,8), %zmm6                        #35.36 c175 stall 1
+..LN512:
+        vgatherdpd 1032(%rdi,%ymm2,8), %zmm26{%k7}              #35.23 c177
+..LN513:
+        vgatherdpd 1544(%rdi,%ymm2,8), %zmm28{%k1}              #35.23 c181 stall 1
+..LN514:
+        vmulpd    %zmm27, %zmm26, %zmm17                        #35.36 c183
+..LN515:
+        vmulpd    %zmm29, %zmm28, %zmm0                         #35.36 c187 stall 1
+..LN516:
+        vfmadd231pd %zmm31, %zmm30, %zmm17                      #35.9 c189
+..LN517:
+        .loc    1  34  is_stmt 1
+        prefetcht0 8(%rcx,%r8,8)                                #34.10 c189
+..LN518:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k2                                 #35.23 c189
+..LN519:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c189
+..LN520:
+        vmovups   256(%rsi,%rax,8), %zmm8                       #35.36 c189
+..LN521:
+        vmovups   320(%rsi,%rax,8), %zmm10                      #35.36 c191
+..LN522:
+        kxnorw    %k0, %k0, %k4                                 #35.23 c191
+..LN523:
+        vpxord    %zmm9, %zmm9, %zmm9                           #35.23 c193
+..LN524:
+        vpxord    %zmm11, %zmm11, %zmm11                        #35.23 c195
+..LN525:
+        vfmadd231pd %zmm7, %zmm6, %zmm0                         #35.9 c195
+..LN526:
+        vgatherdpd 2056(%rdi,%ymm2,8), %zmm9{%k2}               #35.23 c195
+..LN527:
+        vpxord    %zmm13, %zmm13, %zmm13                        #35.23 c197
+..LN528:
+        vgatherdpd 2568(%rdi,%ymm2,8), %zmm11{%k3}              #35.23 c197
+..LN529:
+        vfmadd231pd %zmm9, %zmm8, %zmm17                        #35.9 c201 stall 1
+..LN530:
+        vgatherdpd 3080(%rdi,%ymm2,8), %zmm13{%k4}              #35.23 c201
+..LN531:
+        vfmadd231pd %zmm11, %zmm10, %zmm0                       #35.9 c203
+..LN532:
+        .loc    1  34  is_stmt 1
+        prefetcht0 8(%rcx,%r8,8)                                #34.10 c203
+..LN533:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k5                                 #35.23 c203
+..LN534:
+        kxnorw    %k0, %k0, %k6                                 #35.23 c203
+..LN535:
+        vmovups   384(%rsi,%rax,8), %zmm12                      #35.36 c205
+..LN536:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c205
+..LN537:
+        vpxord    %zmm16, %zmm16, %zmm16                        #35.23 c207
+..LN538:
+        vmovups   448(%rsi,%rax,8), %zmm14                      #35.36 c207
+..LN539:
+        vpxord    %zmm30, %zmm30, %zmm30                        #35.23 c209
+..LN540:
+        vpxord    %zmm31, %zmm31, %zmm31                        #35.23 c209
+..LN541:
+        vgatherdpd 3592(%rdi,%ymm2,8), %zmm16{%k5}              #35.23 c211
+..LN542:
+        vfmadd231pd %zmm13, %zmm12, %zmm17                      #35.9 c211
+..LN543:
+        vgatherdpd 4104(%rdi,%ymm2,8), %zmm30{%k6}              #35.23 c213
+..LN544:
+        vfmadd231pd %zmm16, %zmm14, %zmm0                       #35.9 c217 stall 1
+..LN545:
+        vgatherdpd 4616(%rdi,%ymm2,8), %zmm31{%k1}              #35.23 c217
+..LN546:
+        .loc    1  34  is_stmt 1
+        prefetcht0 8(%rcx,%r8,8)                                #34.10 c219
+..LN547:
+        .loc    1  35  is_stmt 1
+        vpxord    %zmm19, %zmm19, %zmm19                        #35.23 c219
+..LN548:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c219
+..LN549:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c219
+..LN550:
+        vmovups   512(%rsi,%rax,8), %zmm15                      #35.36 c221
+..LN551:
+        vpxord    %zmm21, %zmm21, %zmm21                        #35.23 c221
+..LN552:
+        vmovups   576(%rsi,%rax,8), %zmm16                      #35.36 c223
+..LN553:
+        vfmadd231pd %zmm30, %zmm15, %zmm17                      #35.9 c227 stall 1
+..LN554:
+        vmovups   640(%rsi,%rax,8), %zmm18                      #35.36 c227
+..LN555:
+        vfmadd231pd %zmm31, %zmm16, %zmm0                       #35.9 c229
+..LN556:
+        vmovups   704(%rsi,%rax,8), %zmm20                      #35.36 c229
+..LN557:
+        vgatherdpd 5128(%rdi,%ymm2,8), %zmm19{%k2}              #35.23 c233 stall 1
+..LN558:
+        vgatherdpd 5640(%rdi,%ymm2,8), %zmm21{%k3}              #35.23 c235
+..LN559:
+        vfmadd231pd %zmm19, %zmm18, %zmm17                      #35.9 c239 stall 1
+..LN560:
+        .loc    1  34  is_stmt 1
+        prefetcht0 8(%rcx,%r8,8)                                #34.10 c239
+..LN561:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k4                                 #35.23 c239
+..LN562:
+        vpxord    %zmm23, %zmm23, %zmm23                        #35.23 c239
+..LN563:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c239
+..LN564:
+        vpxord    %zmm25, %zmm25, %zmm25                        #35.23 c241
+..LN565:
+        vmovups   768(%rsi,%rax,8), %zmm22                      #35.36 c241
+..LN566:
+        vmovups   832(%rsi,%rax,8), %zmm24                      #35.36 c241
+..LN567:
+        kxnorw    %k0, %k0, %k7                                 #35.23 c241
+..LN568:
+        vfmadd231pd %zmm21, %zmm20, %zmm0                       #35.9 c243
+..LN569:
+        vpxord    %zmm27, %zmm27, %zmm27                        #35.23 c245
+..LN570:
+        vgatherdpd 6152(%rdi,%ymm2,8), %zmm23{%k4}              #35.23 c247
+..LN571:
+        vgatherdpd 6664(%rdi,%ymm2,8), %zmm25{%k5}              #35.23 c247
+..LN572:
+        vfmadd231pd %zmm23, %zmm22, %zmm17                      #35.9 c253 stall 2
+..LN573:
+        vfmadd231pd %zmm25, %zmm24, %zmm0                       #35.9 c253
+..LN574:
+        vgatherdpd 7176(%rdi,%ymm2,8), %zmm27{%k7}              #35.23 c253
+..LN575:
+        .loc    1  34  is_stmt 1
+        prefetcht0 8(%rcx,%r8,8)                                #34.10 c253
+..LN576:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k1                                 #35.23 c253
+..LN577:
+        vmovups   896(%rsi,%rax,8), %zmm26                      #35.36 c255
+..LN578:
+        vpxord    %zmm29, %zmm29, %zmm29                        #35.23 c259 stall 1
+..LN579:
+        vmovups   960(%rsi,%rax,8), %zmm28                      #35.36 c259
+..LN580:
+        vfmadd231pd %zmm27, %zmm26, %zmm17                      #35.9 c261
+..LN581:
+        vgatherdpd 7688(%rdi,%ymm2,8), %zmm29{%k1}              #35.23 c261
+..LN582:
+        vfmadd231pd %zmm29, %zmm28, %zmm0                       #35.9 c267 stall 2
+..LN583:
+        vaddpd    %zmm0, %zmm17, %zmm1                          #35.9 c273 stall 2
+..LN584:
+        vextractf64x4 $1, %zmm1, %ymm3                          #35.9 c279 stall 2
+..LN585:
+        vaddpd    %ymm1, %ymm3, %ymm4                           #35.9 c281
+..LN586:
+        valignq   $3, %zmm4, %zmm4, %zmm17                      #35.9 c289
+..LN587:
+        .loc    1  34  is_stmt 1
+        prefetcht0 8(%rcx,%r8,8)                                #34.10 c289
+..LN588:
+        .loc    1  35  is_stmt 1
+        valignq   $2, %zmm4, %zmm4, %zmm5                       #35.9 c289
+..LN589:
+        valignq   $1, %zmm4, %zmm4, %zmm6                       #35.9 c291
+..LN590:
+        vaddsd    %xmm6, %xmm5, %xmm7                           #35.9 c295
+..LN591:
+        vaddsd    %xmm4, %xmm17, %xmm8                          #35.9 c297
+..LN592:
+        vaddsd    %xmm8, %xmm7, %xmm9                           #35.9 c301 stall 1
+..LN593:
+        vpxord    %zmm17, %zmm17, %zmm17                        #35.23 c303
+..LN594:
+        vaddsd    8(%rcx,%r8,8), %xmm9, %xmm10                  #35.9 c307 stall 1
+..LN595:
+        .loc    1  34  is_stmt 1
+        prefetcht0 8(%rcx,%r8,8)                                #34.10 c307
+..LN596:
+        .loc    1  35  is_stmt 1
+        vmovsd    %xmm10, 8(%rcx,%r8,8)                         #35.9 c313 stall 2
+..LN597:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c313
+..LN598:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c313
+..LN599:
+        vpxord    %zmm11, %zmm11, %zmm11                        #35.23 c313
+..LN600:
+        vpxord    %zmm13, %zmm13, %zmm13                        #35.23 c313
+..LN601:
+        vmovups   (%rsi,%rax,8), %zmm15                         #35.36 c313
+..LN602:
+        kxnorw    %k0, %k0, %k4                                 #35.23 c315
+..LN603:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c315
+..LN604:
+        vpxord    %zmm19, %zmm19, %zmm19                        #35.23 c315
+..LN605:
+        vgatherdpd 16(%rdi,%ymm2,8), %zmm17{%k2}                #35.23 c319 stall 1
+..LN606:
+        vmovups   64(%rsi,%rax,8), %zmm18                       #35.36 c319
+..LN607:
+        vgatherdpd 1040(%rdi,%ymm2,8), %zmm11{%k4}              #35.23 c325 stall 2
+..LN608:
+        vgatherdpd 1552(%rdi,%ymm2,8), %zmm13{%k5}              #35.23 c325
+..LN609:
+        vgatherdpd 528(%rdi,%ymm2,8), %zmm19{%k3}               #35.23 c331 stall 2
+..LN610:
+        .loc    1  34  is_stmt 1
+        prefetcht0 16(%rcx,%r8,8)                               #34.10 c331
+..LN611:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k6                                 #35.23 c331
+..LN612:
+        vpxord    %zmm21, %zmm21, %zmm21                        #35.23 c331
+..LN613:
+        vpxord    %zmm23, %zmm23, %zmm23                        #35.23 c331
+..LN614:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c331
+..LN615:
+        vmovups   128(%rsi,%rax,8), %zmm12                      #35.36 c333
+..LN616:
+        vmovups   192(%rsi,%rax,8), %zmm14                      #35.36 c337 stall 1
+..LN617:
+        vmulpd    %zmm12, %zmm11, %zmm16                        #35.36 c339
+..LN618:
+        vmovups   256(%rsi,%rax,8), %zmm20                      #35.36 c339
+..LN619:
+        vmulpd    %zmm14, %zmm13, %zmm12                        #35.36 c343 stall 1
+..LN620:
+        vgatherdpd 2064(%rdi,%ymm2,8), %zmm21{%k6}              #35.23 c343
+..LN621:
+        vfmadd231pd %zmm17, %zmm15, %zmm16                      #35.9 c345
+..LN622:
+        vgatherdpd 2576(%rdi,%ymm2,8), %zmm23{%k1}              #35.23 c345
+..LN623:
+        vfmadd231pd %zmm19, %zmm18, %zmm12                      #35.9 c349 stall 1
+..LN624:
+        .loc    1  34  is_stmt 1
+        prefetcht0 16(%rcx,%r8,8)                               #34.10 c349
+..LN625:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k2                                 #35.23 c349
+..LN626:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c349
+..LN627:
+        vmovups   320(%rsi,%rax,8), %zmm22                      #35.36 c351
+..LN628:
+        vpxord    %zmm25, %zmm25, %zmm25                        #35.23 c351
+..LN629:
+        vmovups   384(%rsi,%rax,8), %zmm24                      #35.36 c351
+..LN630:
+        vpxord    %zmm27, %zmm27, %zmm27                        #35.23 c353
+..LN631:
+        vfmadd231pd %zmm21, %zmm20, %zmm16                      #35.9 c355
+..LN632:
+        vfmadd231pd %zmm23, %zmm22, %zmm12                      #35.9 c357
+..LN633:
+        vmovups   448(%rsi,%rax,8), %zmm26                      #35.36 c357
+..LN634:
+        vgatherdpd 3088(%rdi,%ymm2,8), %zmm25{%k2}              #35.23 c357
+..LN635:
+        vfmadd231pd %zmm25, %zmm24, %zmm16                      #35.9 c363 stall 2
+..LN636:
+        vgatherdpd 3600(%rdi,%ymm2,8), %zmm27{%k3}              #35.23 c363
+..LN637:
+        vfmadd231pd %zmm27, %zmm26, %zmm12                      #35.9 c369 stall 2
+..LN638:
+        .loc    1  34  is_stmt 1
+        prefetcht0 16(%rcx,%r8,8)                               #34.10 c369
+..LN639:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k4                                 #35.23 c369
+..LN640:
+        vpxord    %zmm29, %zmm29, %zmm29                        #35.23 c369
+..LN641:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c369
+..LN642:
+        vmovups   512(%rsi,%rax,8), %zmm28                      #35.36 c369
+..LN643:
+        vpxord    %zmm31, %zmm31, %zmm31                        #35.23 c371
+..LN644:
+        vmovups   576(%rsi,%rax,8), %zmm30                      #35.36 c371
+..LN645:
+        kxnorw    %k0, %k0, %k7                                 #35.23 c371
+..LN646:
+        vpxord    %zmm0, %zmm0, %zmm0                           #35.23 c373
+..LN647:
+        vgatherdpd 4112(%rdi,%ymm2,8), %zmm29{%k4}              #35.23 c375
+..LN648:
+        vgatherdpd 4624(%rdi,%ymm2,8), %zmm31{%k5}              #35.23 c377
+..LN649:
+        vfmadd231pd %zmm29, %zmm28, %zmm16                      #35.9 c381 stall 1
+..LN650:
+        vgatherdpd 5136(%rdi,%ymm2,8), %zmm0{%k7}               #35.23 c381
+..LN651:
+        vfmadd231pd %zmm31, %zmm30, %zmm12                      #35.9 c383
+..LN652:
+        .loc    1  34  is_stmt 1
+        prefetcht0 16(%rcx,%r8,8)                               #34.10 c383
+..LN653:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k1                                 #35.23 c383
+..LN654:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c383
+..LN655:
+        vmovups   640(%rsi,%rax,8), %zmm15                      #35.36 c385
+..LN656:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c385
+..LN657:
+        vpxord    %zmm3, %zmm3, %zmm3                           #35.23 c387
+..LN658:
+        vmovups   704(%rsi,%rax,8), %zmm1                       #35.36 c387
+..LN659:
+        vpxord    %zmm5, %zmm5, %zmm5                           #35.23 c389
+..LN660:
+        vpxord    %zmm7, %zmm7, %zmm7                           #35.23 c389
+..LN661:
+        vfmadd231pd %zmm0, %zmm15, %zmm16                       #35.9 c391
+..LN662:
+        vgatherdpd 5648(%rdi,%ymm2,8), %zmm3{%k1}               #35.23 c391
+..LN663:
+        vgatherdpd 6160(%rdi,%ymm2,8), %zmm5{%k2}               #35.23 c393
+..LN664:
+        vfmadd231pd %zmm3, %zmm1, %zmm12                        #35.9 c397 stall 1
+..LN665:
+        vgatherdpd 6672(%rdi,%ymm2,8), %zmm7{%k3}               #35.23 c397
+..LN666:
+        .loc    1  34  is_stmt 1
+        prefetcht0 16(%rcx,%r8,8)                               #34.10 c399
+..LN667:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k4                                 #35.23 c399
+..LN668:
+        vpxord    %zmm9, %zmm9, %zmm9                           #35.23 c399
+..LN669:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c399
+..LN670:
+        vmovups   768(%rsi,%rax,8), %zmm4                       #35.36 c401
+..LN671:
+        vpxord    %zmm11, %zmm11, %zmm11                        #35.23 c401
+..LN672:
+        vmovups   832(%rsi,%rax,8), %zmm6                       #35.36 c403
+..LN673:
+        vfmadd231pd %zmm5, %zmm4, %zmm16                        #35.9 c407 stall 1
+..LN674:
+        vmovups   896(%rsi,%rax,8), %zmm8                       #35.36 c407
+..LN675:
+        vfmadd231pd %zmm7, %zmm6, %zmm12                        #35.9 c409
+..LN676:
+        vmovups   960(%rsi,%rax,8), %zmm10                      #35.36 c409
+..LN677:
+        vgatherdpd 7184(%rdi,%ymm2,8), %zmm9{%k4}               #35.23 c413 stall 1
+..LN678:
+        vgatherdpd 7696(%rdi,%ymm2,8), %zmm11{%k5}              #35.23 c415
+..LN679:
+        vfmadd231pd %zmm9, %zmm8, %zmm16                        #35.9 c419 stall 1
+..LN680:
+        .loc    1  34  is_stmt 1
+        prefetcht0 16(%rcx,%r8,8)                               #34.10 c419
+..LN681:
+        .loc    1  35  is_stmt 1
+        vfmadd231pd %zmm11, %zmm10, %zmm12                      #35.9 c421
+..LN682:
+        vaddpd    %zmm12, %zmm16, %zmm13                        #35.9 c427 stall 2
+..LN683:
+        vextractf64x4 $1, %zmm13, %ymm14                        #35.9 c433 stall 2
+..LN684:
+        vaddpd    %ymm13, %ymm14, %ymm0                         #35.9 c435
+..LN685:
+        valignq   $3, %zmm0, %zmm0, %zmm16                      #35.9 c443
+..LN686:
+        valignq   $2, %zmm0, %zmm0, %zmm17                      #35.9 c443
+..LN687:
+        valignq   $1, %zmm0, %zmm0, %zmm18                      #35.9 c445
+..LN688:
+        .loc    1  34  is_stmt 1
+        prefetcht0 16(%rcx,%r8,8)                               #34.10 c449
+..LN689:
+        .loc    1  35  is_stmt 1
+        vaddsd    %xmm18, %xmm17, %xmm1                         #35.9 c449
+..LN690:
+        vaddsd    %xmm0, %xmm16, %xmm3                          #35.9 c451
+..LN691:
+        vaddsd    %xmm3, %xmm1, %xmm4                           #35.9 c455 stall 1
+..LN692:
+        vpxord    %zmm7, %zmm7, %zmm7                           #35.23 c457
+..LN693:
+        vpxord    %zmm9, %zmm9, %zmm9                           #35.23 c459
+..LN694:
+        vaddsd    16(%rcx,%r8,8), %xmm4, %xmm5                  #35.9 c461
+..LN695:
+        vpxord    %zmm1, %zmm1, %zmm1                           #35.23 c461
+..LN696:
+        vpxord    %zmm4, %zmm4, %zmm4                           #35.23 c461
+..LN697:
+        .loc    1  34  is_stmt 1
+        prefetcht0 16(%rcx,%r8,8)                               #34.10 c461
+..LN698:
+        .loc    1  35  is_stmt 1
+        vmovsd    %xmm5, 16(%rcx,%r8,8)                         #35.9 c467 stall 2
+..LN699:
+        kxnorw    %k0, %k0, %k6                                 #35.23 c467
+..LN700:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c467
+..LN701:
+        vmovsd    24(%rcx,%r8,8), %xmm0                         #35.9 c467
+..LN702:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c469
+..LN703:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c469
+..LN704:
+        vmovups   (%rsi,%rax,8), %zmm6                          #35.36 c473 stall 1
+..LN705:
+        vmovups   64(%rsi,%rax,8), %zmm8                        #35.36 c473
+..LN706:
+        vgatherdpd 24(%rdi,%ymm2,8), %zmm7{%k6}                 #35.23 c479 stall 2
+..LN707:
+        vmovups   128(%rsi,%rax,8), %zmm3                       #35.36 c479
+..LN708:
+        vgatherdpd 536(%rdi,%ymm2,8), %zmm9{%k1}                #35.23 c485 stall 2
+..LN709:
+        vgatherdpd 1048(%rdi,%ymm2,8), %zmm1{%k2}               #35.23 c485
+..LN710:
+        vgatherdpd 1560(%rdi,%ymm2,8), %zmm4{%k3}               #35.23 c491 stall 2
+..LN711:
+        .loc    1  34  is_stmt 1
+        prefetcht0 24(%rcx,%r8,8)                               #34.10 c491
+..LN712:
+        .loc    1  35  is_stmt 1
+        vmovups   192(%rsi,%rax,8), %zmm5                       #35.36 c493
+..LN713:
+        .loc    1  34  is_stmt 1
+        prefetcht0 24(%rcx,%r8,8)                               #34.10 c497 stall 1
+..LN714:
+                                # LOE rax rcx rbx rbp rsi rdi r8 r12 r13 r14 r15 dl xmm0 zmm1 zmm2 zmm3 zmm4 zmm5 zmm6 zmm7 zmm8 zmm9
+..B2.7:                         # Preds ..B2.2
+                                # Execution count [8.00e+00]
+..LN715:
+        prefetcht0 24(%rcx,%r8,8)                               #34.10 c1
+..LN716:
+        .loc    1  35  is_stmt 1
+        vmulpd    %zmm3, %zmm1, %zmm17                          #35.36 c1
+..LN717:
+        vmulpd    %zmm5, %zmm4, %zmm12                          #35.36 c1
+..LN718:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c1
+..LN719:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c1
+..LN720:
+        vmovups   256(%rsi,%rax,8), %zmm1                       #35.36 c1
+..LN721:
+        vmovups   320(%rsi,%rax,8), %zmm19                      #35.36 c3
+..LN722:
+        vpxord    %zmm18, %zmm18, %zmm18                        #35.23 c7 stall 1
+..LN723:
+        vfmadd231pd %zmm7, %zmm6, %zmm17                        #35.9 c7
+..LN724:
+        vpxord    %zmm20, %zmm20, %zmm20                        #35.23 c9
+..LN725:
+        vgatherdpd 2072(%rdi,%ymm2,8), %zmm18{%k1}              #35.23 c9
+..LN726:
+        vfmadd231pd %zmm9, %zmm8, %zmm12                        #35.9 c11
+..LN727:
+        vgatherdpd 2584(%rdi,%ymm2,8), %zmm20{%k2}              #35.23 c11
+..LN728:
+        vfmadd231pd %zmm18, %zmm1, %zmm17                       #35.9 c15 stall 1
+..LN729:
+        .loc    1  34  is_stmt 1
+        prefetcht0 24(%rcx,%r8,8)                               #34.10 c15
+..LN730:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k3                                 #35.23 c15
+..LN731:
+        kxnorw    %k0, %k0, %k4                                 #35.23 c15
+..LN732:
+        vpxord    %zmm22, %zmm22, %zmm22                        #35.23 c17
+..LN733:
+        vmovups   384(%rsi,%rax,8), %zmm21                      #35.36 c17
+..LN734:
+        vmovups   448(%rsi,%rax,8), %zmm23                      #35.36 c17
+..LN735:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c17
+..LN736:
+        vpxord    %zmm24, %zmm24, %zmm24                        #35.23 c19
+..LN737:
+        vfmadd231pd %zmm20, %zmm19, %zmm12                      #35.9 c21
+..LN738:
+        vpxord    %zmm26, %zmm26, %zmm26                        #35.23 c21
+..LN739:
+        vgatherdpd 3096(%rdi,%ymm2,8), %zmm22{%k3}              #35.23 c23
+..LN740:
+        vgatherdpd 3608(%rdi,%ymm2,8), %zmm24{%k4}              #35.23 c23
+..LN741:
+        vfmadd231pd %zmm22, %zmm21, %zmm17                      #35.9 c29 stall 2
+..LN742:
+        vfmadd231pd %zmm24, %zmm23, %zmm12                      #35.9 c29
+..LN743:
+        vgatherdpd 4120(%rdi,%ymm2,8), %zmm26{%k5}              #35.23 c29
+..LN744:
+        .loc    1  34  is_stmt 1
+        prefetcht0 24(%rcx,%r8,8)                               #34.10 c29
+..LN745:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k6                                 #35.23 c29
+..LN746:
+        kxnorw    %k0, %k0, %k7                                 #35.23 c29
+..LN747:
+        vmovups   512(%rsi,%rax,8), %zmm25                      #35.36 c31
+..LN748:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c31
+..LN749:
+        vpxord    %zmm28, %zmm28, %zmm28                        #35.23 c35 stall 1
+..LN750:
+        vmovups   576(%rsi,%rax,8), %zmm27                      #35.36 c35
+..LN751:
+        vpxord    %zmm30, %zmm30, %zmm30                        #35.23 c35
+..LN752:
+        vpxord    %zmm6, %zmm6, %zmm6                           #35.23 c37
+..LN753:
+        vfmadd231pd %zmm26, %zmm25, %zmm17                      #35.9 c37
+..LN754:
+        vgatherdpd 4632(%rdi,%ymm2,8), %zmm28{%k6}              #35.23 c37
+..LN755:
+        vgatherdpd 5144(%rdi,%ymm2,8), %zmm30{%k7}              #35.23 c41 stall 1
+..LN756:
+        vfmadd231pd %zmm28, %zmm27, %zmm12                      #35.9 c43
+..LN757:
+        vgatherdpd 5656(%rdi,%ymm2,8), %zmm6{%k1}               #35.23 c43
+..LN758:
+        .loc    1  34  is_stmt 1
+        prefetcht0 24(%rcx,%r8,8)                               #34.10 c47 stall 1
+..LN759:
+        .loc    1  35  is_stmt 1
+        vpxord    %zmm8, %zmm8, %zmm8                           #35.23 c47
+..LN760:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c47
+..LN761:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c47
+..LN762:
+        vmovups   640(%rsi,%rax,8), %zmm29                      #35.36 c49
+..LN763:
+        vmovups   704(%rsi,%rax,8), %zmm31                      #35.36 c49
+..LN764:
+        vpxord    %zmm3, %zmm3, %zmm3                           #35.23 c49
+..LN765:
+        vfmadd231pd %zmm30, %zmm29, %zmm17                      #35.9 c55 stall 2
+..LN766:
+        vmovups   768(%rsi,%rax,8), %zmm7                       #35.36 c55
+..LN767:
+        vfmadd231pd %zmm6, %zmm31, %zmm12                       #35.9 c55
+..LN768:
+        vmovups   832(%rsi,%rax,8), %zmm9                       #35.36 c55
+..LN769:
+        vgatherdpd 6168(%rdi,%ymm2,8), %zmm8{%k2}               #35.23 c61 stall 2
+..LN770:
+        vgatherdpd 6680(%rdi,%ymm2,8), %zmm3{%k3}               #35.23 c61
+..LN771:
+        vfmadd231pd %zmm8, %zmm7, %zmm17                        #35.9 c67 stall 2
+..LN772:
+        .loc    1  34  is_stmt 1
+        prefetcht0 24(%rcx,%r8,8)                               #34.10 c67
+..LN773:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k4                                 #35.23 c67
+..LN774:
+        vpxord    %zmm5, %zmm5, %zmm5                           #35.23 c67
+..LN775:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c67
+..LN776:
+        vmovups   896(%rsi,%rax,8), %zmm4                       #35.36 c67
+..LN777:
+        vpxord    %zmm11, %zmm11, %zmm11                        #35.23 c69
+..LN778:
+        vmovups   960(%rsi,%rax,8), %zmm10                      #35.36 c69
+..LN779:
+        vfmadd231pd %zmm3, %zmm9, %zmm12                        #35.9 c71
+..LN780:
+        vgatherdpd 7192(%rdi,%ymm2,8), %zmm5{%k4}               #35.23 c73
+..LN781:
+        vgatherdpd 7704(%rdi,%ymm2,8), %zmm11{%k5}              #35.23 c75
+..LN782:
+        vfmadd231pd %zmm5, %zmm4, %zmm17                        #35.9 c79 stall 1
+..LN783:
+        vfmadd231pd %zmm11, %zmm10, %zmm12                      #35.9 c81
+..LN784:
+        vaddpd    %zmm12, %zmm17, %zmm13                        #35.9 c87 stall 2
+..LN785:
+        vextractf64x4 $1, %zmm13, %ymm14                        #35.9 c93 stall 2
+..LN786:
+        .loc    1  34  is_stmt 1
+        prefetcht0 24(%rcx,%r8,8)                               #34.10 c93
+..LN787:
+        .loc    1  35  is_stmt 1
+        vaddpd    %ymm13, %ymm14, %ymm15                        #35.9 c95
+..LN788:
+        valignq   $3, %zmm15, %zmm15, %zmm1                     #35.9 c103
+..LN789:
+        valignq   $2, %zmm15, %zmm15, %zmm16                    #35.9 c103
+..LN790:
+        valignq   $1, %zmm15, %zmm15, %zmm17                    #35.9 c105
+..LN791:
+        vaddsd    %xmm17, %xmm16, %xmm3                         #35.9 c109
+..LN792:
+        vaddsd    %xmm15, %xmm1, %xmm4                          #35.9 c111
+..LN793:
+        .loc    1  34  is_stmt 1
+        prefetcht0 32(%rcx,%r8,8)                               #34.10 c111
+..LN794:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k6                                 #35.23 c111
+..LN795:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c111
+..LN796:
+        vaddsd    %xmm4, %xmm3, %xmm18                          #35.9 c115 stall 1
+..LN797:
+        vpxord    %zmm24, %zmm24, %zmm24                        #35.23 c117
+..LN798:
+        vpxord    %zmm26, %zmm26, %zmm26                        #35.23 c119
+..LN799:
+        vaddsd    %xmm0, %xmm18, %xmm0                          #35.9 c121
+..LN800:
+        vmovsd    %xmm0, 24(%rcx,%r8,8)                         #35.9 c127 stall 2
+..LN801:
+        vmovups   (%rsi,%rax,8), %zmm23                         #35.36 c127
+..LN802:
+        vpxord    %zmm19, %zmm19, %zmm19                        #35.23 c127
+..LN803:
+        vmovups   64(%rsi,%rax,8), %zmm25                       #35.36 c133 stall 2
+..LN804:
+        vgatherdpd 32(%rdi,%ymm2,8), %zmm24{%k6}                #35.23 c133
+..LN805:
+        vgatherdpd 544(%rdi,%ymm2,8), %zmm26{%k1}               #35.23 c139 stall 2
+..LN806:
+        .loc    1  34  is_stmt 1
+        prefetcht0 32(%rcx,%r8,8)                               #34.10 c139
+..LN807:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k2                                 #35.23 c139
+..LN808:
+        vpxord    %zmm21, %zmm21, %zmm21                        #35.23 c139
+..LN809:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c139
+..LN810:
+        vpxord    %zmm28, %zmm28, %zmm28                        #35.23 c139
+..LN811:
+        vmovups   128(%rsi,%rax,8), %zmm20                      #35.36 c141
+..LN812:
+        kxnorw    %k0, %k0, %k4                                 #35.23 c141
+..LN813:
+        vmovups   192(%rsi,%rax,8), %zmm22                      #35.36 c145 stall 1
+..LN814:
+        vgatherdpd 1056(%rdi,%ymm2,8), %zmm19{%k2}              #35.23 c147
+..LN815:
+        vgatherdpd 1568(%rdi,%ymm2,8), %zmm21{%k3}              #35.23 c151 stall 1
+..LN816:
+        vmulpd    %zmm20, %zmm19, %zmm16                        #35.36 c153
+..LN817:
+        vgatherdpd 2080(%rdi,%ymm2,8), %zmm28{%k4}              #35.23 c153
+..LN818:
+        vmulpd    %zmm22, %zmm21, %zmm17                        #35.36 c157 stall 1
+..LN819:
+        vfmadd231pd %zmm24, %zmm23, %zmm16                      #35.9 c159
+..LN820:
+        vfmadd231pd %zmm26, %zmm25, %zmm17                      #35.9 c163 stall 1
+..LN821:
+        .loc    1  34  is_stmt 1
+        prefetcht0 32(%rcx,%r8,8)                               #34.10 c163
+..LN822:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k5                                 #35.23 c163
+..LN823:
+        vmovups   256(%rsi,%rax,8), %zmm27                      #35.36 c163
+..LN824:
+        kxnorw    %k0, %k0, %k7                                 #35.23 c163
+..LN825:
+        vpxord    %zmm30, %zmm30, %zmm30                        #35.23 c165
+..LN826:
+        vmovups   320(%rsi,%rax,8), %zmm29                      #35.36 c165
+..LN827:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c165
+..LN828:
+        vpxord    %zmm5, %zmm5, %zmm5                           #35.23 c167
+..LN829:
+        vpxord    %zmm7, %zmm7, %zmm7                           #35.23 c169
+..LN830:
+        vfmadd231pd %zmm28, %zmm27, %zmm16                      #35.9 c169
+..LN831:
+        vgatherdpd 2592(%rdi,%ymm2,8), %zmm30{%k5}              #35.23 c169
+..LN832:
+        vgatherdpd 3104(%rdi,%ymm2,8), %zmm5{%k7}               #35.23 c171
+..LN833:
+        vfmadd231pd %zmm30, %zmm29, %zmm17                      #35.9 c175 stall 1
+..LN834:
+        vgatherdpd 3616(%rdi,%ymm2,8), %zmm7{%k1}               #35.23 c175
+..LN835:
+        .loc    1  34  is_stmt 1
+        prefetcht0 32(%rcx,%r8,8)                               #34.10 c177
+..LN836:
+        .loc    1  35  is_stmt 1
+        vpxord    %zmm9, %zmm9, %zmm9                           #35.23 c177
+..LN837:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c177
+..LN838:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c177
+..LN839:
+        vmovups   384(%rsi,%rax,8), %zmm31                      #35.36 c179
+..LN840:
+        vpxord    %zmm11, %zmm11, %zmm11                        #35.23 c179
+..LN841:
+        vmovups   448(%rsi,%rax,8), %zmm6                       #35.36 c181
+..LN842:
+        vfmadd231pd %zmm5, %zmm31, %zmm16                       #35.9 c185 stall 1
+..LN843:
+        vmovups   512(%rsi,%rax,8), %zmm8                       #35.36 c185
+..LN844:
+        vfmadd231pd %zmm7, %zmm6, %zmm17                        #35.9 c187
+..LN845:
+        vmovups   576(%rsi,%rax,8), %zmm10                      #35.36 c187
+..LN846:
+        vgatherdpd 4128(%rdi,%ymm2,8), %zmm9{%k2}               #35.23 c191 stall 1
+..LN847:
+        vgatherdpd 4640(%rdi,%ymm2,8), %zmm11{%k3}              #35.23 c193
+..LN848:
+        vfmadd231pd %zmm9, %zmm8, %zmm16                        #35.9 c197 stall 1
+..LN849:
+        .loc    1  34  is_stmt 1
+        prefetcht0 32(%rcx,%r8,8)                               #34.10 c197
+..LN850:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k4                                 #35.23 c197
+..LN851:
+        vpxord    %zmm13, %zmm13, %zmm13                        #35.23 c197
+..LN852:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c197
+..LN853:
+        vpxord    %zmm1, %zmm1, %zmm1                           #35.23 c199
+..LN854:
+        vmovups   640(%rsi,%rax,8), %zmm12                      #35.36 c199
+..LN855:
+        vmovups   704(%rsi,%rax,8), %zmm14                      #35.36 c199
+..LN856:
+        kxnorw    %k0, %k0, %k6                                 #35.23 c199
+..LN857:
+        vfmadd231pd %zmm11, %zmm10, %zmm17                      #35.9 c201
+..LN858:
+        vpxord    %zmm23, %zmm23, %zmm23                        #35.23 c203
+..LN859:
+        vgatherdpd 5152(%rdi,%ymm2,8), %zmm13{%k4}              #35.23 c205
+..LN860:
+        vgatherdpd 5664(%rdi,%ymm2,8), %zmm1{%k5}               #35.23 c205
+..LN861:
+        vfmadd231pd %zmm13, %zmm12, %zmm16                      #35.9 c211 stall 2
+..LN862:
+        vfmadd231pd %zmm1, %zmm14, %zmm17                       #35.9 c211
+..LN863:
+        vgatherdpd 6176(%rdi,%ymm2,8), %zmm23{%k6}              #35.23 c211
+..LN864:
+        .loc    1  34  is_stmt 1
+        prefetcht0 32(%rcx,%r8,8)                               #34.10 c211
+..LN865:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k1                                 #35.23 c211
+..LN866:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c211
+..LN867:
+        vmovups   768(%rsi,%rax,8), %zmm0                       #35.36 c213
+..LN868:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c213
+..LN869:
+        vpxord    %zmm25, %zmm25, %zmm25                        #35.23 c217 stall 1
+..LN870:
+        vmovups   832(%rsi,%rax,8), %zmm24                      #35.36 c217
+..LN871:
+        vpxord    %zmm27, %zmm27, %zmm27                        #35.23 c217
+..LN872:
+        vpxord    %zmm29, %zmm29, %zmm29                        #35.23 c219
+..LN873:
+        vfmadd231pd %zmm23, %zmm0, %zmm16                       #35.9 c219
+..LN874:
+        vgatherdpd 6688(%rdi,%ymm2,8), %zmm25{%k1}              #35.23 c219
+..LN875:
+        vgatherdpd 7200(%rdi,%ymm2,8), %zmm27{%k2}              #35.23 c223 stall 1
+..LN876:
+        vfmadd231pd %zmm25, %zmm24, %zmm17                      #35.9 c225
+..LN877:
+        vgatherdpd 7712(%rdi,%ymm2,8), %zmm29{%k3}              #35.23 c225
+..LN878:
+        .loc    1  34  is_stmt 1
+        prefetcht0 32(%rcx,%r8,8)                               #34.10 c229 stall 1
+..LN879:
+        .loc    1  35  is_stmt 1
+        vmovups   896(%rsi,%rax,8), %zmm26                      #35.36 c231
+..LN880:
+        vmovups   960(%rsi,%rax,8), %zmm28                      #35.36 c231
+..LN881:
+        vfmadd231pd %zmm27, %zmm26, %zmm16                      #35.9 c237 stall 2
+..LN882:
+        vfmadd231pd %zmm29, %zmm28, %zmm17                      #35.9 c237
+..LN883:
+        vaddpd    %zmm17, %zmm16, %zmm3                         #35.9 c243 stall 2
+..LN884:
+        vextractf64x4 $1, %zmm3, %ymm4                          #35.9 c249 stall 2
+..LN885:
+        vaddpd    %ymm3, %ymm4, %ymm5                           #35.9 c251
+..LN886:
+        valignq   $3, %zmm5, %zmm5, %zmm16                      #35.9 c259
+..LN887:
+        valignq   $2, %zmm5, %zmm5, %zmm18                      #35.9 c259
+..LN888:
+        valignq   $1, %zmm5, %zmm5, %zmm19                      #35.9 c261
+..LN889:
+        .loc    1  34  is_stmt 1
+        prefetcht0 32(%rcx,%r8,8)                               #34.10 c261
+..LN890:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k4                                 #35.23 c261
+..LN891:
+        vaddsd    %xmm19, %xmm18, %xmm6                         #35.9 c265
+..LN892:
+        vaddsd    %xmm5, %xmm16, %xmm7                          #35.9 c267
+..LN893:
+        vaddsd    %xmm7, %xmm6, %xmm20                          #35.9 c271 stall 1
+..LN894:
+        vpxord    %zmm10, %zmm10, %zmm10                        #35.23 c273
+..LN895:
+        vaddsd    32(%rcx,%r8,8), %xmm20, %xmm21                #35.9 c277 stall 1
+..LN896:
+        vmovsd    %xmm21, 32(%rcx,%r8,8)                        #35.9 c283 stall 2
+..LN897:
+        vgatherdpd 40(%rdi,%ymm2,8), %zmm10{%k4}                #35.23 c283
+..LN898:
+        .loc    1  34  is_stmt 1
+        prefetcht0 40(%rcx,%r8,8)                               #34.10 c289 stall 2
+..LN899:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k5                                 #35.23 c289
+..LN900:
+        vpxord    %zmm22, %zmm22, %zmm22                        #35.23 c289
+..LN901:
+        kxnorw    %k0, %k0, %k7                                 #35.23 c289
+..LN902:
+        vpxord    %zmm31, %zmm31, %zmm31                        #35.23 c289
+..LN903:
+        vmovups   128(%rsi,%rax,8), %zmm30                      #35.36 c289
+..LN904:
+        vgatherdpd 1064(%rdi,%ymm2,8), %zmm22{%k7}              #35.23 c291
+..LN905:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c291
+..LN906:
+        vpxord    %zmm12, %zmm12, %zmm12                        #35.23 c291
+..LN907:
+        vmovups   192(%rsi,%rax,8), %zmm8                       #35.36 c295 stall 1
+..LN908:
+        vmovups   (%rsi,%rax,8), %zmm9                          #35.36 c297
+..LN909:
+        vmovups   64(%rsi,%rax,8), %zmm11                       #35.36 c301 stall 1
+..LN910:
+        vgatherdpd 1576(%rdi,%ymm2,8), %zmm31{%k1}              #35.23 c303
+..LN911:
+        vgatherdpd 552(%rdi,%ymm2,8), %zmm12{%k5}               #35.23 c307 stall 1
+..LN912:
+        .loc    1  34  is_stmt 1
+        prefetcht0 40(%rcx,%r8,8)                               #34.10 c309
+..LN913:
+        .loc    1  35  is_stmt 1
+        vmulpd    %zmm30, %zmm22, %zmm0                         #35.36 c309
+..LN914:
+        vmulpd    %zmm8, %zmm31, %zmm3                          #35.36 c309
+..LN915:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c309
+..LN916:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c309
+..LN917:
+        vmovups   256(%rsi,%rax,8), %zmm13                      #35.36 c311
+..LN918:
+        vmovups   320(%rsi,%rax,8), %zmm14                      #35.36 c313
+..LN919:
+        vpxord    %zmm15, %zmm15, %zmm15                        #35.23 c315
+..LN920:
+        vfmadd231pd %zmm10, %zmm9, %zmm0                        #35.9 c315
+..LN921:
+        vpxord    %zmm1, %zmm1, %zmm1                           #35.23 c317
+..LN922:
+        vgatherdpd 2088(%rdi,%ymm2,8), %zmm15{%k2}              #35.23 c317
+..LN923:
+        vfmadd231pd %zmm12, %zmm11, %zmm3                       #35.9 c319
+..LN924:
+        vgatherdpd 2600(%rdi,%ymm2,8), %zmm1{%k3}               #35.23 c319
+..LN925:
+        vfmadd231pd %zmm15, %zmm13, %zmm0                       #35.9 c323 stall 1
+..LN926:
+        .loc    1  34  is_stmt 1
+        prefetcht0 40(%rcx,%r8,8)                               #34.10 c323
+..LN927:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k4                                 #35.23 c323
+..LN928:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c323
+..LN929:
+        vpxord    %zmm17, %zmm17, %zmm17                        #35.23 c325
+..LN930:
+        vmovups   384(%rsi,%rax,8), %zmm16                      #35.36 c325
+..LN931:
+        vmovups   448(%rsi,%rax,8), %zmm18                      #35.36 c325
+..LN932:
+        kxnorw    %k0, %k0, %k6                                 #35.23 c325
+..LN933:
+        vpxord    %zmm19, %zmm19, %zmm19                        #35.23 c327
+..LN934:
+        vfmadd231pd %zmm1, %zmm14, %zmm3                        #35.9 c329
+..LN935:
+        vpxord    %zmm21, %zmm21, %zmm21                        #35.23 c329
+..LN936:
+        vgatherdpd 3112(%rdi,%ymm2,8), %zmm17{%k4}              #35.23 c331
+..LN937:
+        vgatherdpd 3624(%rdi,%ymm2,8), %zmm19{%k5}              #35.23 c331
+..LN938:
+        vfmadd231pd %zmm17, %zmm16, %zmm0                       #35.9 c337 stall 2
+..LN939:
+        vfmadd231pd %zmm19, %zmm18, %zmm3                       #35.9 c337
+..LN940:
+        vgatherdpd 4136(%rdi,%ymm2,8), %zmm21{%k6}              #35.23 c337
+..LN941:
+        .loc    1  34  is_stmt 1
+        prefetcht0 40(%rcx,%r8,8)                               #34.10 c337
+..LN942:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k1                                 #35.23 c337
+..LN943:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c337
+..LN944:
+        vmovups   512(%rsi,%rax,8), %zmm20                      #35.36 c339
+..LN945:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c339
+..LN946:
+        vpxord    %zmm23, %zmm23, %zmm23                        #35.23 c343 stall 1
+..LN947:
+        vmovups   576(%rsi,%rax,8), %zmm22                      #35.36 c343
+..LN948:
+        vpxord    %zmm25, %zmm25, %zmm25                        #35.23 c343
+..LN949:
+        vpxord    %zmm27, %zmm27, %zmm27                        #35.23 c345
+..LN950:
+        vfmadd231pd %zmm21, %zmm20, %zmm0                       #35.9 c345
+..LN951:
+        vgatherdpd 4648(%rdi,%ymm2,8), %zmm23{%k1}              #35.23 c345
+..LN952:
+        vgatherdpd 5160(%rdi,%ymm2,8), %zmm25{%k2}              #35.23 c349 stall 1
+..LN953:
+        vfmadd231pd %zmm23, %zmm22, %zmm3                       #35.9 c351
+..LN954:
+        vgatherdpd 5672(%rdi,%ymm2,8), %zmm27{%k3}              #35.23 c351
+..LN955:
+        .loc    1  34  is_stmt 1
+        prefetcht0 40(%rcx,%r8,8)                               #34.10 c355 stall 1
+..LN956:
+        .loc    1  35  is_stmt 1
+        vpxord    %zmm29, %zmm29, %zmm29                        #35.23 c355
+..LN957:
+        kxnorw    %k0, %k0, %k4                                 #35.23 c355
+..LN958:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c355
+..LN959:
+        vmovups   640(%rsi,%rax,8), %zmm24                      #35.36 c357
+..LN960:
+        vmovups   704(%rsi,%rax,8), %zmm26                      #35.36 c357
+..LN961:
+        vpxord    %zmm31, %zmm31, %zmm31                        #35.23 c357
+..LN962:
+        vfmadd231pd %zmm25, %zmm24, %zmm0                       #35.9 c363 stall 2
+..LN963:
+        vmovups   768(%rsi,%rax,8), %zmm28                      #35.36 c363
+..LN964:
+        vfmadd231pd %zmm27, %zmm26, %zmm3                       #35.9 c363
+..LN965:
+        vmovups   832(%rsi,%rax,8), %zmm30                      #35.36 c363
+..LN966:
+        vgatherdpd 6184(%rdi,%ymm2,8), %zmm29{%k4}              #35.23 c369 stall 2
+..LN967:
+        vgatherdpd 6696(%rdi,%ymm2,8), %zmm31{%k5}              #35.23 c369
+..LN968:
+        vfmadd231pd %zmm29, %zmm28, %zmm0                       #35.9 c375 stall 2
+..LN969:
+        .loc    1  34  is_stmt 1
+        prefetcht0 40(%rcx,%r8,8)                               #34.10 c375
+..LN970:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k7                                 #35.23 c375
+..LN971:
+        vpxord    %zmm10, %zmm10, %zmm10                        #35.23 c375
+..LN972:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c375
+..LN973:
+        vmovups   896(%rsi,%rax,8), %zmm9                       #35.36 c375
+..LN974:
+        vpxord    %zmm12, %zmm12, %zmm12                        #35.23 c377
+..LN975:
+        vmovups   960(%rsi,%rax,8), %zmm11                      #35.36 c377
+..LN976:
+        vfmadd231pd %zmm31, %zmm30, %zmm3                       #35.9 c379
+..LN977:
+        vgatherdpd 7208(%rdi,%ymm2,8), %zmm10{%k7}              #35.23 c381
+..LN978:
+        vgatherdpd 7720(%rdi,%ymm2,8), %zmm12{%k1}              #35.23 c383
+..LN979:
+        vfmadd231pd %zmm10, %zmm9, %zmm0                        #35.9 c387 stall 1
+..LN980:
+        vfmadd231pd %zmm12, %zmm11, %zmm3                       #35.9 c389
+..LN981:
+        vaddpd    %zmm3, %zmm0, %zmm0                           #35.9 c395 stall 2
+..LN982:
+        vextractf64x4 $1, %zmm0, %ymm4                          #35.9 c401 stall 2
+..LN983:
+        .loc    1  34  is_stmt 1
+        prefetcht0 40(%rcx,%r8,8)                               #34.10 c401
+..LN984:
+        .loc    1  35  is_stmt 1
+        vaddpd    %ymm0, %ymm4, %ymm5                           #35.9 c403
+..LN985:
+        valignq   $3, %zmm5, %zmm5, %zmm6                       #35.9 c411
+..LN986:
+        valignq   $2, %zmm5, %zmm5, %zmm7                       #35.9 c411
+..LN987:
+        valignq   $1, %zmm5, %zmm5, %zmm8                       #35.9 c413
+..LN988:
+        vaddsd    %xmm8, %xmm7, %xmm13                          #35.9 c417
+..LN989:
+        vaddsd    %xmm5, %xmm6, %xmm14                          #35.9 c419
+..LN990:
+        .loc    1  34  is_stmt 1
+        prefetcht0 40(%rcx,%r8,8)                               #34.10 c419
+..LN991:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k2                                 #35.23 c419
+..LN992:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c419
+..LN993:
+        vaddsd    %xmm14, %xmm13, %xmm15                        #35.9 c423 stall 1
+..LN994:
+        vpxord    %zmm7, %zmm7, %zmm7                           #35.23 c425
+..LN995:
+        vpxord    %zmm9, %zmm9, %zmm9                           #35.23 c427
+..LN996:
+        vaddsd    40(%rcx,%r8,8), %xmm15, %xmm1                 #35.9 c429
+..LN997:
+        vmovsd    %xmm1, 40(%rcx,%r8,8)                         #35.9 c435 stall 2
+..LN998:
+        vmovsd    48(%rcx,%r8,8), %xmm1                         #35.9 c435
+..LN999:
+        vmovups   (%rsi,%rax,8), %zmm6                          #35.36 c441 stall 2
+..LN1000:
+        vmovups   64(%rsi,%rax,8), %zmm8                        #35.36 c441
+..LN1001:
+        vgatherdpd 48(%rdi,%ymm2,8), %zmm7{%k2}                 #35.23 c447 stall 2
+..LN1002:
+        vgatherdpd 560(%rdi,%ymm2,8), %zmm9{%k3}                #35.23 c447
+..LN1003:
+        .loc    1  34  is_stmt 1
+        prefetcht0 48(%rcx,%r8,8)                               #34.10 c453 stall 2
+..LN1004:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k4                                 #35.23 c453
+..LN1005:
+        vpxord    %zmm0, %zmm0, %zmm0                           #35.23 c453
+..LN1006:
+        vpxord    %zmm4, %zmm4, %zmm4                           #35.23 c453
+..LN1007:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c453
+..LN1008:
+        vmovups   128(%rsi,%rax,8), %zmm3                       #35.36 c453
+..LN1009:
+        vmovups   192(%rsi,%rax,8), %zmm5                       #35.36 c455
+..LN1010:
+        vpxord    %zmm11, %zmm11, %zmm11                        #35.23 c455
+..LN1011:
+        vgatherdpd 1072(%rdi,%ymm2,8), %zmm0{%k4}               #35.23 c459 stall 1
+..LN1012:
+        vgatherdpd 1584(%rdi,%ymm2,8), %zmm4{%k5}               #35.23 c461
+..LN1013:
+        vmulpd    %zmm3, %zmm0, %zmm0                           #35.36 c465 stall 1
+..LN1014:
+        vmulpd    %zmm5, %zmm4, %zmm13                          #35.36 c467
+..LN1015:
+        vfmadd231pd %zmm7, %zmm6, %zmm0                         #35.9 c471 stall 1
+..LN1016:
+        vfmadd231pd %zmm9, %zmm8, %zmm13                        #35.9 c473
+..LN1017:
+        .loc    1  34  is_stmt 1
+        prefetcht0 48(%rcx,%r8,8)                               #34.10 c473
+..LN1018:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k6                                 #35.23 c473
+..LN1019:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c473
+..LN1020:
+        vmovups   256(%rsi,%rax,8), %zmm10                      #35.36 c473
+..LN1021:
+        vmovups   320(%rsi,%rax,8), %zmm12                      #35.36 c475
+..LN1022:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c475
+..LN1023:
+        vpxord    %zmm16, %zmm16, %zmm16                        #35.23 c477
+..LN1024:
+        vpxord    %zmm6, %zmm6, %zmm6                           #35.23 c479
+..LN1025:
+        vpxord    %zmm5, %zmm5, %zmm5                           #35.23 c479
+..LN1026:
+        vgatherdpd 2096(%rdi,%ymm2,8), %zmm11{%k6}              #35.23 c479
+..LN1027:
+        vgatherdpd 2608(%rdi,%ymm2,8), %zmm16{%k1}              #35.23 c481
+..LN1028:
+        vfmadd231pd %zmm11, %zmm10, %zmm0                       #35.9 c485 stall 1
+..LN1029:
+        vgatherdpd 3120(%rdi,%ymm2,8), %zmm6{%k2}               #35.23 c485
+..LN1030:
+        vfmadd231pd %zmm16, %zmm12, %zmm13                      #35.9 c487
+..LN1031:
+        .loc    1  34  is_stmt 1
+        prefetcht0 48(%rcx,%r8,8)                               #34.10 c487
+..LN1032:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k3                                 #35.23 c487
+..LN1033:
+        vmovups   384(%rsi,%rax,8), %zmm4                       #35.36 c489
+..LN1034:
+        vmovups   448(%rsi,%rax,8), %zmm3                       #35.36 c491
+..LN1035:
+        vgatherdpd 3632(%rdi,%ymm2,8), %zmm5{%k3}               #35.23 c495 stall 1
+..LN1036:
+        .loc    1  34  is_stmt 1
+        prefetcht0 48(%rcx,%r8,8)                               #34.10 c497
+..LN1037:
+                                # LOE rax rcx rbx rbp rsi rdi r8 r12 r13 r14 r15 dl xmm1 zmm0 zmm2 zmm3 zmm4 zmm5 zmm6 zmm13
+..B2.6:                         # Preds ..B2.7
+                                # Execution count [8.00e+00]
+..LN1038:
+        prefetcht0 48(%rcx,%r8,8)                               #34.10 c1
+..LN1039:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k1                                 #35.23 c1
+..LN1040:
+        vpxord    %zmm18, %zmm18, %zmm18                        #35.23 c1
+..LN1041:
+        vpxord    %zmm20, %zmm20, %zmm20                        #35.23 c1
+..LN1042:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c1
+..LN1043:
+        vmovups   512(%rsi,%rax,8), %zmm17                      #35.36 c1
+..LN1044:
+        vfmadd231pd %zmm6, %zmm4, %zmm0                         #35.9 c3
+..LN1045:
+        vmovups   576(%rsi,%rax,8), %zmm19                      #35.36 c3
+..LN1046:
+        vpxord    %zmm22, %zmm22, %zmm22                        #35.23 c3
+..LN1047:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c3
+..LN1048:
+        vfmadd231pd %zmm5, %zmm3, %zmm13                        #35.9 c5
+..LN1049:
+        vgatherdpd 4144(%rdi,%ymm2,8), %zmm18{%k1}              #35.23 c7
+..LN1050:
+        vgatherdpd 4656(%rdi,%ymm2,8), %zmm20{%k2}              #35.23 c9
+..LN1051:
+        vfmadd231pd %zmm18, %zmm17, %zmm0                       #35.9 c13 stall 1
+..LN1052:
+        vgatherdpd 5168(%rdi,%ymm2,8), %zmm22{%k3}              #35.23 c13
+..LN1053:
+        vfmadd231pd %zmm20, %zmm19, %zmm13                      #35.9 c15
+..LN1054:
+        .loc    1  34  is_stmt 1
+        prefetcht0 48(%rcx,%r8,8)                               #34.10 c15
+..LN1055:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k4                                 #35.23 c15
+..LN1056:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c15
+..LN1057:
+        vmovups   640(%rsi,%rax,8), %zmm21                      #35.36 c17
+..LN1058:
+        kxnorw    %k0, %k0, %k6                                 #35.23 c17
+..LN1059:
+        vpxord    %zmm24, %zmm24, %zmm24                        #35.23 c19
+..LN1060:
+        vmovups   704(%rsi,%rax,8), %zmm23                      #35.36 c19
+..LN1061:
+        vpxord    %zmm26, %zmm26, %zmm26                        #35.23 c21
+..LN1062:
+        vpxord    %zmm28, %zmm28, %zmm28                        #35.23 c21
+..LN1063:
+        vfmadd231pd %zmm22, %zmm21, %zmm0                       #35.9 c23
+..LN1064:
+        vmovups   768(%rsi,%rax,8), %zmm25                      #35.36 c23
+..LN1065:
+        vgatherdpd 5680(%rdi,%ymm2,8), %zmm24{%k4}              #35.23 c25
+..LN1066:
+        vgatherdpd 6192(%rdi,%ymm2,8), %zmm26{%k5}              #35.23 c29 stall 1
+..LN1067:
+        vfmadd231pd %zmm24, %zmm23, %zmm13                      #35.9 c31
+..LN1068:
+        vgatherdpd 6704(%rdi,%ymm2,8), %zmm28{%k6}              #35.23 c31
+..LN1069:
+        .loc    1  34  is_stmt 1
+        prefetcht0 48(%rcx,%r8,8)                               #34.10 c35 stall 1
+..LN1070:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k7                                 #35.23 c35
+..LN1071:
+        vpxord    %zmm30, %zmm30, %zmm30                        #35.23 c35
+..LN1072:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c35
+..LN1073:
+        vmovups   832(%rsi,%rax,8), %zmm27                      #35.36 c37
+..LN1074:
+        vpxord    %zmm3, %zmm3, %zmm3                           #35.23 c37
+..LN1075:
+        vfmadd231pd %zmm26, %zmm25, %zmm0                       #35.9 c37
+..LN1076:
+        vmovups   896(%rsi,%rax,8), %zmm29                      #35.36 c37
+..LN1077:
+        vfmadd231pd %zmm28, %zmm27, %zmm13                      #35.9 c43 stall 2
+..LN1078:
+        vmovups   960(%rsi,%rax,8), %zmm31                      #35.36 c43
+..LN1079:
+        vgatherdpd 7216(%rdi,%ymm2,8), %zmm30{%k7}              #35.23 c43
+..LN1080:
+        vfmadd231pd %zmm30, %zmm29, %zmm0                       #35.9 c49 stall 2
+..LN1081:
+        vgatherdpd 7728(%rdi,%ymm2,8), %zmm3{%k1}               #35.23 c49
+..LN1082:
+        vfmadd231pd %zmm3, %zmm31, %zmm13                       #35.9 c55 stall 2
+..LN1083:
+        vaddpd    %zmm13, %zmm0, %zmm0                          #35.9 c61 stall 2
+..LN1084:
+        .loc    1  34  is_stmt 1
+        prefetcht0 48(%rcx,%r8,8)                               #34.10 c61
+..LN1085:
+        .loc    1  35  is_stmt 1
+        vextractf64x4 $1, %zmm0, %ymm4                          #35.9 c67 stall 2
+..LN1086:
+        vaddpd    %ymm0, %ymm4, %ymm5                           #35.9 c69
+..LN1087:
+        valignq   $3, %zmm5, %zmm5, %zmm6                       #35.9 c77
+..LN1088:
+        valignq   $2, %zmm5, %zmm5, %zmm7                       #35.9 c77
+..LN1089:
+        valignq   $1, %zmm5, %zmm5, %zmm8                       #35.9 c79
+..LN1090:
+        vaddsd    %xmm8, %xmm7, %xmm9                           #35.9 c83
+..LN1091:
+        vaddsd    %xmm5, %xmm6, %xmm10                          #35.9 c85
+..LN1092:
+        .loc    1  34  is_stmt 1
+        prefetcht0 56(%rcx,%r8,8)                               #34.10 c85
+..LN1093:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k2                                 #35.23 c85
+..LN1094:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c85
+..LN1095:
+        kxnorw    %k0, %k0, %k4                                 #35.23 c87
+..LN1096:
+        vaddsd    %xmm10, %xmm9, %xmm11                         #35.9 c89
+..LN1097:
+        vpxord    %zmm18, %zmm18, %zmm18                        #35.23 c91
+..LN1098:
+        vpxord    %zmm20, %zmm20, %zmm20                        #35.23 c93
+..LN1099:
+        vaddsd    %xmm1, %xmm11, %xmm1                          #35.9 c95
+..LN1100:
+        vmovsd    %xmm1, 48(%rcx,%r8,8)                         #35.9 c101 stall 2
+..LN1101:
+        vpxord    %zmm12, %zmm12, %zmm12                        #35.23 c101
+..LN1102:
+        vmovups   (%rsi,%rax,8), %zmm17                         #35.36 c101
+..LN1103:
+        vmovups   64(%rsi,%rax,8), %zmm19                       #35.36 c107 stall 2
+..LN1104:
+        vgatherdpd 56(%rdi,%ymm2,8), %zmm18{%k2}                #35.23 c107
+..LN1105:
+        vgatherdpd 568(%rdi,%ymm2,8), %zmm20{%k3}               #35.23 c113 stall 2
+..LN1106:
+        vgatherdpd 1080(%rdi,%ymm2,8), %zmm12{%k4}              #35.23 c113
+..LN1107:
+        .loc    1  34  is_stmt 1
+        prefetcht0 56(%rcx,%r8,8)                               #34.10 c119 stall 2
+..LN1108:
+        .loc    1  35  is_stmt 1
+        vpxord    %zmm14, %zmm14, %zmm14                        #35.23 c119
+..LN1109:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c119
+..LN1110:
+        vmovups   128(%rsi,%rax,8), %zmm13                      #35.36 c119
+..LN1111:
+        kxnorw    %k0, %k0, %k6                                 #35.23 c119
+..LN1112:
+        vpxord    %zmm22, %zmm22, %zmm22                        #35.23 c119
+..LN1113:
+        vmovups   192(%rsi,%rax,8), %zmm15                      #35.36 c121
+..LN1114:
+        vpxord    %zmm24, %zmm24, %zmm24                        #35.23 c121
+..LN1115:
+        kxnorw    %k0, %k0, %k1                                 #35.23 c121
+..LN1116:
+        vmulpd    %zmm13, %zmm12, %zmm16                        #35.36 c125 stall 1
+..LN1117:
+        vgatherdpd 1592(%rdi,%ymm2,8), %zmm14{%k5}              #35.23 c125
+..LN1118:
+        vgatherdpd 2104(%rdi,%ymm2,8), %zmm22{%k6}              #35.23 c127
+..LN1119:
+        vmulpd    %zmm15, %zmm14, %zmm14                        #35.36 c131 stall 1
+..LN1120:
+        vfmadd231pd %zmm18, %zmm17, %zmm16                      #35.9 c131
+..LN1121:
+        vgatherdpd 2616(%rdi,%ymm2,8), %zmm24{%k1}              #35.23 c131
+..LN1122:
+        vfmadd231pd %zmm20, %zmm19, %zmm14                      #35.9 c137 stall 2
+..LN1123:
+        .loc    1  34  is_stmt 1
+        prefetcht0 56(%rcx,%r8,8)                               #34.10 c137
+..LN1124:
+        .loc    1  35  is_stmt 1
+        vmovups   256(%rsi,%rax,8), %zmm21                      #35.36 c137
+..LN1125:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c137
+..LN1126:
+        vpxord    %zmm26, %zmm26, %zmm26                        #35.23 c137
+..LN1127:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c137
+..LN1128:
+        vmovups   320(%rsi,%rax,8), %zmm23                      #35.36 c139
+..LN1129:
+        vpxord    %zmm28, %zmm28, %zmm28                        #35.23 c139
+..LN1130:
+        vfmadd231pd %zmm22, %zmm21, %zmm16                      #35.9 c143 stall 1
+..LN1131:
+        vmovups   384(%rsi,%rax,8), %zmm25                      #35.36 c143
+..LN1132:
+        vfmadd231pd %zmm24, %zmm23, %zmm14                      #35.9 c145
+..LN1133:
+        vmovups   448(%rsi,%rax,8), %zmm27                      #35.36 c145
+..LN1134:
+        vgatherdpd 3128(%rdi,%ymm2,8), %zmm26{%k2}              #35.23 c149 stall 1
+..LN1135:
+        vgatherdpd 3640(%rdi,%ymm2,8), %zmm28{%k3}              #35.23 c151
+..LN1136:
+        vfmadd231pd %zmm26, %zmm25, %zmm16                      #35.9 c155 stall 1
+..LN1137:
+        vfmadd231pd %zmm28, %zmm27, %zmm14                      #35.9 c157
+..LN1138:
+        .loc    1  34  is_stmt 1
+        prefetcht0 56(%rcx,%r8,8)                               #34.10 c157
+..LN1139:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k4                                 #35.23 c157
+..LN1140:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c157
+..LN1141:
+        vmovups   512(%rsi,%rax,8), %zmm29                      #35.36 c157
+..LN1142:
+        vmovups   576(%rsi,%rax,8), %zmm31                      #35.36 c159
+..LN1143:
+        kxnorw    %k0, %k0, %k7                                 #35.23 c159
+..LN1144:
+        vpxord    %zmm30, %zmm30, %zmm30                        #35.23 c161
+..LN1145:
+        vpxord    %zmm0, %zmm0, %zmm0                           #35.23 c163
+..LN1146:
+        vpxord    %zmm3, %zmm3, %zmm3                           #35.23 c163
+..LN1147:
+        vgatherdpd 4152(%rdi,%ymm2,8), %zmm30{%k4}              #35.23 c163
+..LN1148:
+        vpxord    %zmm5, %zmm5, %zmm5                           #35.23 c165
+..LN1149:
+        vgatherdpd 4664(%rdi,%ymm2,8), %zmm0{%k5}               #35.23 c165
+..LN1150:
+        vfmadd231pd %zmm30, %zmm29, %zmm16                      #35.9 c169 stall 1
+..LN1151:
+        vgatherdpd 5176(%rdi,%ymm2,8), %zmm3{%k7}               #35.23 c169
+..LN1152:
+        vfmadd231pd %zmm0, %zmm31, %zmm14                       #35.9 c171
+..LN1153:
+        .loc    1  34  is_stmt 1
+        prefetcht0 56(%rcx,%r8,8)                               #34.10 c171
+..LN1154:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k1                                 #35.23 c171
+..LN1155:
+        kxnorw    %k0, %k0, %k2                                 #35.23 c171
+..LN1156:
+        vmovups   640(%rsi,%rax,8), %zmm1                       #35.36 c173
+..LN1157:
+        kxnorw    %k0, %k0, %k3                                 #35.23 c173
+..LN1158:
+        vmovups   704(%rsi,%rax,8), %zmm4                       #35.36 c175
+..LN1159:
+        vpxord    %zmm7, %zmm7, %zmm7                           #35.23 c175
+..LN1160:
+        vpxord    %zmm9, %zmm9, %zmm9                           #35.23 c177
+..LN1161:
+        vfmadd231pd %zmm3, %zmm1, %zmm16                        #35.9 c179
+..LN1162:
+        vmovups   768(%rsi,%rax,8), %zmm6                       #35.36 c179
+..LN1163:
+        vmovups   832(%rsi,%rax,8), %zmm8                       #35.36 c181
+..LN1164:
+        vgatherdpd 5688(%rdi,%ymm2,8), %zmm5{%k1}               #35.23 c185 stall 1
+..LN1165:
+        vgatherdpd 6200(%rdi,%ymm2,8), %zmm7{%k2}               #35.23 c187
+..LN1166:
+        vfmadd231pd %zmm5, %zmm4, %zmm14                        #35.9 c191 stall 1
+..LN1167:
+        vgatherdpd 6712(%rdi,%ymm2,8), %zmm9{%k3}               #35.23 c191
+..LN1168:
+        .loc    1  34  is_stmt 1
+        prefetcht0 56(%rcx,%r8,8)                               #34.10 c193
+..LN1169:
+        .loc    1  35  is_stmt 1
+        kxnorw    %k0, %k0, %k4                                 #35.23 c193
+..LN1170:
+        vpxord    %zmm11, %zmm11, %zmm11                        #35.23 c193
+..LN1171:
+        kxnorw    %k0, %k0, %k5                                 #35.23 c193
+..LN1172:
+        vpxord    %zmm13, %zmm13, %zmm13                        #35.23 c195
+..LN1173:
+        vmovups   896(%rsi,%rax,8), %zmm10                      #35.36 c195
+..LN1174:
+        vfmadd231pd %zmm7, %zmm6, %zmm16                        #35.9 c197
+..LN1175:
+        vfmadd231pd %zmm9, %zmm8, %zmm14                        #35.9 c197
+..LN1176:
+        vmovups   960(%rsi,%rax,8), %zmm12                      #35.36 c197
+..LN1177:
+        vgatherdpd 7224(%rdi,%ymm2,8), %zmm11{%k4}              #35.23 c201 stall 1
+..LN1178:
+        vgatherdpd 7736(%rdi,%ymm2,8), %zmm13{%k5}              #35.23 c203
+..LN1179:
+        vfmadd231pd %zmm11, %zmm10, %zmm16                      #35.9 c207 stall 1
+..LN1180:
+        vfmadd231pd %zmm13, %zmm12, %zmm14                      #35.9 c209
+..LN1181:
+        vaddpd    %zmm14, %zmm16, %zmm15                        #35.9 c215 stall 2
+..LN1182:
+        vextractf64x4 $1, %zmm15, %ymm0                         #35.9 c221 stall 2
+..LN1183:
+        .loc    1  34  is_stmt 1
+        prefetcht0 56(%rcx,%r8,8)                               #34.10 c221
+..LN1184:
+        .loc    1  35  is_stmt 1
+        vaddpd    %ymm15, %ymm0, %ymm1                          #35.9 c223
+..LN1185:
+        valignq   $3, %zmm1, %zmm1, %zmm16                      #35.9 c231
+..LN1186:
+        valignq   $2, %zmm1, %zmm1, %zmm17                      #35.9 c231
+..LN1187:
+        valignq   $1, %zmm1, %zmm1, %zmm18                      #35.9 c233
+..LN1188:
+        vaddsd    %xmm18, %xmm17, %xmm3                         #35.9 c237
+..LN1189:
+        vaddsd    %xmm1, %xmm16, %xmm4                          #35.9 c239
+..LN1190:
+        .loc    1  34  is_stmt 1
+        prefetcht0 56(%rcx,%r8,8)                               #34.10 c239
+..LN1191:
+        .loc    1  26  is_stmt 1
+        addb      $1, %dl                                       #26.3 c239
+..LN1192:
+        addq      $128, %rax                                    #26.3 c239
+..LN1193:
+        .loc    1  35  is_stmt 1
+        vaddsd    %xmm4, %xmm3, %xmm0                           #35.9 c243 stall 1
+..LN1194:
+        vaddsd    56(%rcx,%r8,8), %xmm0, %xmm5                  #35.9 c249 stall 2
+..LN1195:
+        vmovsd    %xmm5, 56(%rcx,%r8,8)                         #35.9 c255 stall 2
+..LN1196:
+        .loc    1  26  is_stmt 1
+        cmpb      $8, %dl                                       #26.3 c255
+..LN1197:
+        jb        ..B2.2        # Prob 87%                      #26.3 c257
+..LN1198:
+                                # LOE rax rcx rbx rbp rsi rdi r12 r13 r14 r15 dl zmm2
+..B2.3:                         # Preds ..B2.6
+                                # Execution count [1.00e+00]
+..LN1199:
+        .loc    1  44  is_stmt 1
+        ret                                                     #44.1 c3
+        .align    16,0x90
+..LN1200:
+                                # LOE
+..LN1201:
+        .cfi_endproc
+# mark_end;
+        .type   _Z9dgemm_optPdS_S_,@function
+        .size   _Z9dgemm_optPdS_S_,.-_Z9dgemm_optPdS_S_
+..LN_Z9dgemm_optPdS_S_.1202:
+.LN_Z9dgemm_optPdS_S_:
+        .data
+# -- End  _Z9dgemm_optPdS_S_
+        .text
+.L_2__routine_start__Z5dgemmPdS_S__2:
+# -- Begin  _Z5dgemmPdS_S_
+        .text
+# mark_begin;
+# Threads 2
+        .align    16,0x90
+        .globl _Z5dgemmPdS_S_
+# --- dgemm(double *, double *, double *)
+_Z5dgemmPdS_S_:
+# parameter 1(A): %rdi
+# parameter 2(B): %rsi
+# parameter 3(C): %rdx
+..B3.1:                         # Preds ..B3.0
+                                # Execution count [0.00e+00]
+        .cfi_startproc
+        .cfi_personality 0x3,__gxx_personality_v0
+..___tag_value__Z5dgemmPdS_S_.48:
+..L49:
+                                                         #10.45
+..LN1203:
+        .loc    1  10  is_stmt 1
+..LN1204:
+        .loc    1  11  is_stmt 1
+        movq      %r12, -56(%rsp)                               #11.3[spill] c3
+..LN1205:
+        .loc    1  10  is_stmt 1
+        movq      %rsi, %r8                                     #10.45 c3
+..LN1206:
+        .loc    1  11  is_stmt 1
+        movq      %r13, -48(%rsp)                               #11.3[spill] c3
+..LN1207:
+        xorl      %ecx, %ecx                                    #11.3 c3
+..LN1208:
+        movq      %r14, -40(%rsp)                               #11.3[spill] c5
+..LN1209:
+        xorl      %esi, %esi                                    #11.3 c5
+..LN1210:
+        movq      %r15, -32(%rsp)                               #11.3[spill] c5
+..LN1211:
+        xorl      %eax, %eax                                    #11.3 c5
+..LN1212:
+        movq      %rbx, -24(%rsp)                               #11.3[spill] c7
+        .cfi_offset 3, -32
+        .cfi_offset 12, -64
+        .cfi_offset 13, -56
+        .cfi_offset 14, -48
+        .cfi_offset 15, -40
+..LN1213:
+                                # LOE rax rdx rbp rdi r8 ecx esi
+..B3.2:                         # Preds ..B3.16 ..B3.1
+                                # Execution count [0.00e+00]
+..LN1214:
+        .loc    1  14  is_stmt 1
+        movl      %ecx, %r14d                                   #14.36 c1
+..LN1215:
+        movq      %rdx, -16(%rsp)                               #14.36[spill] c1
+..LN1216:
+        lea       (,%rcx,8), %r12d                              #14.9 c1
+..LN1217:
+        .loc    1  12  is_stmt 1
+        movq      %rax, %r13                                    #12.5 c1
+..LN1218:
+        .loc    1  14  is_stmt 1
+        shll      $7, %r14d                                     #14.36 c3
+..LN1219:
+        lea       (%rdx,%r12,8), %r12                           #14.9 c3
+..LN1220:
+        lea       (%r8,%r14,8), %r11                            #14.36 c3
+..LN1221:
+                                # LOE rax rbp rdi r8 r11 r12 r13 ecx esi r14d
+..B3.3:                         # Preds ..B3.15 ..B3.2
+                                # Execution count [0.00e+00]
+..LN1222:
+        lea       (%rdi,%r13,8), %rbx                           #14.23 c1
+..LN1223:
+        lea       (%r12,%r13,8), %r10                           #14.9 c1
+..LN1224:
+        cmpq      %rbx, %r10                                    #14.23 c3
+..LN1225:
+        jbe       ..B3.5        # Prob 50%                      #14.23 c5
+..LN1226:
+                                # LOE rax rbx rbp rdi r8 r10 r11 r12 r13 ecx esi r14d
+..B3.4:                         # Preds ..B3.3
+                                # Execution count [0.00e+00]
+..LN1227:
+        movq      %r10, %rdx                                    #14.23 c1
+..LN1228:
+        subq      %rbx, %rdx                                    #14.23 c3
+..LN1229:
+        cmpq      $8136, %rdx                                   #14.23 c5
+..LN1230:
+        jge       ..B3.7        # Prob 50%                      #14.23 c7
+..LN1231:
+        jmp       ..B3.12       # Prob 100%                     #14.23 c7
+..LN1232:
+                                # LOE rax rbx rbp rdi r8 r10 r11 r12 r13 ecx esi r14d
+..B3.5:                         # Preds ..B3.3
+                                # Execution count [0.00e+00]
+..LN1233:
+        cmpq      %r10, %rbx                                    #14.23 c1
+..LN1234:
+        jbe       ..B3.12       # Prob 50%                      #14.23 c3
+..LN1235:
+                                # LOE rax rbx rbp rdi r8 r10 r11 r12 r13 ecx esi r14d
+..B3.6:                         # Preds ..B3.5
+                                # Execution count [0.00e+00]
+..LN1236:
+        movq      %rbx, %rdx                                    #14.23 c1
+..LN1237:
+        subq      %r10, %rdx                                    #14.23 c3
+..LN1238:
+        cmpq      $8, %rdx                                      #14.23 c5
+..LN1239:
+        jl        ..B3.12       # Prob 50%                      #14.23 c7
+..LN1240:
+                                # LOE rax rbx rbp rdi r8 r10 r11 r12 r13 ecx esi r14d
+..B3.7:                         # Preds ..B3.6 ..B3.4
+                                # Execution count [0.00e+00]
+..LN1241:
+        cmpq      %r11, %r10                                    #14.36 c1
+..LN1242:
+        jbe       ..B3.9        # Prob 50%                      #14.36 c3
+..LN1243:
+                                # LOE rax rbx rbp rdi r8 r10 r11 r12 r13 ecx esi r14d
+..B3.8:                         # Preds ..B3.7
+                                # Execution count [0.00e+00]
+..LN1244:
+        movq      %r10, %rdx                                    #14.36 c1
+..LN1245:
+        subq      %r11, %rdx                                    #14.36 c3
+..LN1246:
+        cmpq      $1024, %rdx                                   #14.36 c5
+..LN1247:
+        jge       ..B3.11       # Prob 50%                      #14.36 c7
+..LN1248:
+        jmp       ..B3.12       # Prob 100%                     #14.36 c7
+..LN1249:
+                                # LOE rax rbx rbp rdi r8 r10 r11 r12 r13 ecx esi r14d
+..B3.9:                         # Preds ..B3.7
+                                # Execution count [0.00e+00]
+..LN1250:
+        cmpq      %r10, %r11                                    #14.36 c1
+..LN1251:
+        jbe       ..B3.12       # Prob 50%                      #14.36 c3
+..LN1252:
+                                # LOE rax rbx rbp rdi r8 r10 r11 r12 r13 ecx esi r14d
+..B3.10:                        # Preds ..B3.9
+                                # Execution count [0.00e+00]
+..LN1253:
+        movq      %r11, %rdx                                    #14.36 c1
+..LN1254:
+        subq      %r10, %rdx                                    #14.36 c3
+..LN1255:
+        cmpq      $8, %rdx                                      #14.36 c5
+..LN1256:
+        jl        ..B3.12       # Prob 50%                      #14.36 c7
+..LN1257:
+                                # LOE rax rbx rbp rdi r8 r10 r11 r12 r13 ecx esi r14d
+..B3.11:                        # Preds ..B3.8 ..B3.10
+                                # Execution count [3.20e+01]
+..LN1258:
+        vmovdqu32 .L_2il0floatpacket.15(%rip), %zmm16           #14.23 c1
+..LN1259:
+        kxnorw    %k0, %k0, %k1                                 #14.23 c1
+..LN1260:
+        kxnorw    %k0, %k0, %k2                                 #14.23 c1
+..LN1261:
+        vpxord    %zmm18, %zmm18, %zmm18                        #14.23 c1
+..LN1262:
+        vpxord    %zmm20, %zmm20, %zmm20                        #14.23 c1
+..LN1263:
+        vmovups   128(%r11), %zmm19                             #14.36 c1
+..LN1264:
+        kxnorw    %k0, %k0, %k3                                 #14.23 c3
+..LN1265:
+        kxnorw    %k0, %k0, %k4                                 #14.23 c3
+..LN1266:
+        vpxord    %zmm23, %zmm23, %zmm23                        #14.23 c3
+..LN1267:
+        vpxord    %zmm25, %zmm25, %zmm25                        #14.23 c3
+..LN1268:
+        kxnorw    %k0, %k0, %k5                                 #14.23 c5
+..LN1269:
+        vpxord    %zmm27, %zmm27, %zmm27                        #14.23 c5
+..LN1270:
+        vpxord    %zmm29, %zmm29, %zmm29                        #14.23 c5
+..LN1271:
+        kxnorw    %k0, %k0, %k6                                 #14.23 c5
+..LN1272:
+        vmovups   192(%r11), %zmm21                             #14.36 c7
+..LN1273:
+        vmovups   (%r11), %zmm22                                #14.36 c7
+..LN1274:
+        kxnorw    %k0, %k0, %k7                                 #14.23 c7
+..LN1275:
+        vpxord    %zmm31, %zmm31, %zmm31                        #14.23 c7
+..LN1276:
+        vpxord    %zmm1, %zmm1, %zmm1                           #14.23 c7
+..LN1277:
+        vpxord    %zmm3, %zmm3, %zmm3                           #14.23 c9
+..LN1278:
+        vpxord    %zmm5, %zmm5, %zmm5                           #14.23 c9
+..LN1279:
+        vpxord    %zmm7, %zmm7, %zmm7                           #14.23 c11
+..LN1280:
+        vpxord    %zmm9, %zmm9, %zmm9                           #14.23 c11
+..LN1281:
+        vgatherdpd 1024(%rbx,%ymm16,8), %zmm18{%k3}             #14.23 c13
+..LN1282:
+        vmovups   64(%r11), %zmm24                              #14.36 c13
+..LN1283:
+        vpxord    %zmm11, %zmm11, %zmm11                        #14.23 c13
+..LN1284:
+        vpxord    %zmm13, %zmm13, %zmm13                        #14.23 c13
+..LN1285:
+        vpxord    %zmm15, %zmm15, %zmm15                        #14.23 c15
+..LN1286:
+        vmulpd    %zmm19, %zmm18, %zmm17                        #14.36 c19 stall 1
+..LN1287:
+        vmovups   256(%r11), %zmm26                             #14.36 c19
+..LN1288:
+        vmovups   320(%r11), %zmm28                             #14.36 c19
+..LN1289:
+        vmovups   384(%r11), %zmm30                             #14.36 c25 stall 2
+..LN1290:
+        vgatherdpd 1536(%rbx,%ymm16,8), %zmm20{%k4}             #14.23 c25
+..LN1291:
+        vmulpd    %zmm21, %zmm20, %zmm18                        #14.36 c31 stall 2
+..LN1292:
+        vmovups   448(%r11), %zmm0                              #14.36 c31
+..LN1293:
+        vmovups   512(%r11), %zmm2                              #14.36 c31
+..LN1294:
+        vmovups   576(%r11), %zmm4                              #14.36 c37 stall 2
+..LN1295:
+        vmovups   640(%r11), %zmm6                              #14.36 c37
+..LN1296:
+        vgatherdpd (%rbx,%ymm16,8), %zmm23{%k1}                 #14.23 c43 stall 2
+..LN1297:
+        kxnorw    %k0, %k0, %k1                                 #14.23 c43
+..LN1298:
+        vmovups   704(%r11), %zmm8                              #14.36 c43
+..LN1299:
+        vfmadd231pd %zmm23, %zmm22, %zmm17                      #14.9 c49 stall 2
+..LN1300:
+        vmovups   768(%r11), %zmm10                             #14.36 c49
+..LN1301:
+        vmovups   832(%r11), %zmm12                             #14.36 c49
+..LN1302:
+        vpxord    %zmm22, %zmm22, %zmm22                        #14.23 c49
+..LN1303:
+        vmovups   896(%r11), %zmm14                             #14.36 c55 stall 2
+..LN1304:
+        vgatherdpd 512(%rbx,%ymm16,8), %zmm25{%k2}              #14.23 c55
+..LN1305:
+        kxnorw    %k0, %k0, %k2                                 #14.23 c55
+..LN1306:
+        kxnorw    %k0, %k0, %k3                                 #14.23 c55
+..LN1307:
+        kxnorw    %k0, %k0, %k4                                 #14.23 c57
+..LN1308:
+        vfmadd231pd %zmm25, %zmm24, %zmm18                      #14.9 c61 stall 1
+..LN1309:
+        vgatherdpd 2048(%rbx,%ymm16,8), %zmm27{%k5}             #14.23 c61
+..LN1310:
+        kxnorw    %k0, %k0, %k5                                 #14.23 c61
+..LN1311:
+        vgatherdpd 2560(%rbx,%ymm16,8), %zmm29{%k6}             #14.23 c61
+..LN1312:
+        kxnorw    %k0, %k0, %k6                                 #14.23 c61
+..LN1313:
+        vfmadd231pd %zmm27, %zmm26, %zmm17                      #14.9 c67 stall 2
+..LN1314:
+        vfmadd231pd %zmm29, %zmm28, %zmm18                      #14.9 c67
+..LN1315:
+        vgatherdpd 3072(%rbx,%ymm16,8), %zmm31{%k7}             #14.23 c67
+..LN1316:
+        vgatherdpd 3584(%rbx,%ymm16,8), %zmm1{%k1}              #14.23 c67
+..LN1317:
+        kxnorw    %k0, %k0, %k1                                 #14.23 c67
+..LN1318:
+        vfmadd231pd %zmm31, %zmm30, %zmm17                      #14.9 c73 stall 2
+..LN1319:
+        vfmadd231pd %zmm1, %zmm0, %zmm18                        #14.9 c73
+..LN1320:
+        vgatherdpd 4096(%rbx,%ymm16,8), %zmm3{%k2}              #14.23 c73
+..LN1321:
+        kxnorw    %k0, %k0, %k2                                 #14.23 c73
+..LN1322:
+        vgatherdpd 4608(%rbx,%ymm16,8), %zmm5{%k3}              #14.23 c73
+..LN1323:
+        kxnorw    %k0, %k0, %k3                                 #14.23 c73
+..LN1324:
+        vfmadd231pd %zmm3, %zmm2, %zmm17                        #14.9 c79 stall 2
+..LN1325:
+        vfmadd231pd %zmm5, %zmm4, %zmm18                        #14.9 c79
+..LN1326:
+        vgatherdpd 5120(%rbx,%ymm16,8), %zmm7{%k4}              #14.23 c79
+..LN1327:
+        vgatherdpd 5632(%rbx,%ymm16,8), %zmm9{%k5}              #14.23 c79
+..LN1328:
+        vfmadd231pd %zmm7, %zmm6, %zmm17                        #14.9 c85 stall 2
+..LN1329:
+        vfmadd231pd %zmm9, %zmm8, %zmm18                        #14.9 c85
+..LN1330:
+        vgatherdpd 6144(%rbx,%ymm16,8), %zmm11{%k6}             #14.23 c85
+..LN1331:
+        vgatherdpd 6656(%rbx,%ymm16,8), %zmm13{%k1}             #14.23 c85
+..LN1332:
+        vfmadd231pd %zmm11, %zmm10, %zmm17                      #14.9 c91 stall 2
+..LN1333:
+        vfmadd231pd %zmm13, %zmm12, %zmm18                      #14.9 c91
+..LN1334:
+        vgatherdpd 7168(%rbx,%ymm16,8), %zmm15{%k2}             #14.23 c91
+..LN1335:
+        vgatherdpd 7680(%rbx,%ymm16,8), %zmm22{%k3}             #14.23 c91
+..LN1336:
+        vmovups   960(%r11), %zmm16                             #14.36 c97 stall 2
+..LN1337:
+        vfmadd231pd %zmm15, %zmm14, %zmm17                      #14.9 c97
+..LN1338:
+        vfmadd231pd %zmm22, %zmm16, %zmm18                      #14.9 c103 stall 2
+..LN1339:
+        vaddpd    %zmm18, %zmm17, %zmm0                         #14.9 c109 stall 2
+..LN1340:
+        vextractf64x4 $1, %zmm0, %ymm1                          #14.9 c115 stall 2
+..LN1341:
+        vaddpd    %ymm0, %ymm1, %ymm2                           #14.9 c117
+..LN1342:
+        valignq   $3, %zmm2, %zmm2, %zmm17                      #14.9 c125
+..LN1343:
+        valignq   $2, %zmm2, %zmm2, %zmm19                      #14.9 c125
+..LN1344:
+        valignq   $1, %zmm2, %zmm2, %zmm20                      #14.9 c127
+..LN1345:
+        vaddsd    %xmm20, %xmm19, %xmm3                         #14.9 c131
+..LN1346:
+        vaddsd    %xmm2, %xmm17, %xmm4                          #14.9 c133
+..LN1347:
+        vaddsd    %xmm4, %xmm3, %xmm5                           #14.9 c137 stall 1
+..LN1348:
+        vaddsd    (%r12,%r13,8), %xmm5, %xmm6                   #14.9 c143 stall 2
+..LN1349:
+        vmovsd    %xmm6, (%r12,%r13,8)                          #14.9 c149 stall 2
+..LN1350:
+        jmp       ..B3.15       # Prob 100%                     #14.9 c149 stall 2
+..LN1351:
+                                # LOE rax rbp rdi r8 r11 r12 r13 ecx esi r14d
+..B3.12:                        # Preds ..B3.6 ..B3.8 ..B3.9 ..B3.4 ..B3.5
+                                #       ..B3.10
+                                # Execution count [3.20e+01]
+..LN1352:
+        vmovsd    (%r10), %xmm0                                 #14.9 c1
+..LN1353:
+        .loc    1  13  is_stmt 1
+        movl      %esi, %r9d                                    #13.7 c1
+..LN1354:
+        movq      %rax, %rdx                                    #13.7 c1
+..LN1355:
+                                # LOE rax rdx rbx rbp rdi r8 r10 r11 r12 r13 ecx esi r9d r14d xmm0
+..B3.13:                        # Preds ..B3.13 ..B3.12
+                                # Execution count [2.05e+03]
+..LN1356:
+        .loc    1  14  is_stmt 1
+        lea       (%r14,%r9,2), %r15d                           #14.36 c1
+..LN1357:
+        vmovsd    (%r8,%r15,8), %xmm1                           #14.36 c1
+..LN1358:
+        .loc    1  13  is_stmt 1
+        addl      $1, %r9d                                      #13.7 c1
+..LN1359:
+        .loc    1  14  is_stmt 1
+        vfmadd231sd (%rbx,%rdx,8), %xmm1, %xmm0                 #14.9 c7 stall 2
+..LN1360:
+        vmovsd    %xmm0, (%r10)                                 #14.9 c13 stall 2
+..LN1361:
+        vmovsd    8(%r8,%r15,8), %xmm2                          #14.36 c13
+..LN1362:
+        vfmadd231sd 64(%rbx,%rdx,8), %xmm2, %xmm0               #14.9 c19 stall 2
+..LN1363:
+        vmovsd    %xmm0, (%r10)                                 #14.9 c25 stall 2
+..LN1364:
+        .loc    1  13  is_stmt 1
+        addq      $16, %rdx                                     #13.7 c25
+..LN1365:
+        cmpl      $64, %r9d                                     #13.7 c25
+..LN1366:
+        jb        ..B3.13       # Prob 98%                      #13.7 c27
+..LN1367:
+                                # LOE rax rdx rbx rbp rdi r8 r10 r11 r12 r13 ecx esi r9d r14d xmm0
+..B3.15:                        # Preds ..B3.13 ..B3.11
+                                # Execution count [6.40e+01]
+..LN1368:
+        .loc    1  12  is_stmt 1
+        addq      $1, %r13                                      #12.5 c1
+..LN1369:
+        cmpq      $8, %r13                                      #12.5 c3
+..LN1370:
+        jb        ..B3.3        # Prob 87%                      #12.5 c5
+..LN1371:
+                                # LOE rax rbp rdi r8 r11 r12 r13 ecx esi r14d
+..B3.16:                        # Preds ..B3.15
+                                # Execution count [8.00e+00]
+..LN1372:
+        .loc    1  11  is_stmt 1
+        .byte     15                                            #11.3 c1
+..LN1373:
+        .byte     31                                            #11.3 c1
+..LN1374:
+        .byte     0                                             #11.3 c1
+..LN1375:
+        addl      $1, %ecx                                      #11.3 c1
+..LN1376:
+        movq      -16(%rsp), %rdx                               #[spill] c1
+..LN1377:
+        cmpl      $8, %ecx                                      #11.3 c3
+..LN1378:
+        jb        ..B3.2        # Prob 87%                      #11.3 c5
+..LN1379:
+                                # LOE rax rdx rbp rdi r8 ecx esi
+..B3.17:                        # Preds ..B3.16
+                                # Execution count [1.00e+00]
+..LN1380:
+        movq      -56(%rsp), %r12                               #[spill] c1
+        .cfi_restore 12
+..LN1381:
+        movq      -48(%rsp), %r13                               #[spill] c1
+        .cfi_restore 13
+..LN1382:
+        movq      -40(%rsp), %r14                               #[spill] c5 stall 1
+        .cfi_restore 14
+..LN1383:
+        movq      -32(%rsp), %r15                               #[spill] c5
+        .cfi_restore 15
+..LN1384:
+        movq      -24(%rsp), %rbx                               #[spill] c9 stall 1
+        .cfi_restore 3
+..LN1385:
+        .loc    1  18  is_stmt 1
+        ret                                                     #18.1 c11
+        .align    16,0x90
+..LN1386:
+                                # LOE
+..LN1387:
+        .cfi_endproc
+# mark_end;
+        .type   _Z5dgemmPdS_S_,@function
+        .size   _Z5dgemmPdS_S_,.-_Z5dgemmPdS_S_
+..LN_Z5dgemmPdS_S_.1388:
+.LN_Z5dgemmPdS_S_:
+        .data
+# -- End  _Z5dgemmPdS_S_
+        .section .rodata, "a"
+        .align 64
+        .align 64
+.L_2il0floatpacket.2:
+        .long   0xffffffe0,0xffffffe0,0xffffffe0,0xffffffe0,0xffffffe0,0xffffffe0,0xffffffe0,0xffffffe0,0xffffffe0,0xffffffe0,0xffffffe0,0xffffffe0,0xffffffe0,0xffffffe0,0xffffffe0,0xffffffe0
+        .type   .L_2il0floatpacket.2,@object
+        .size   .L_2il0floatpacket.2,64
+        .align 64
+.L_2il0floatpacket.8:
+        .long   0x00000000,0xffffffff,0xfffffffe,0xfffffffd,0xfffffffc,0xfffffffb,0xfffffffa,0xfffffff9,0xfffffff8,0xfffffff7,0xfffffff6,0xfffffff5,0xfffffff4,0xfffffff3,0xfffffff2,0xfffffff1
+        .type   .L_2il0floatpacket.8,@object
+        .size   .L_2il0floatpacket.8,64
+        .align 64
+.L_2il0floatpacket.15:
+        .long   0x00000000,0x00000008,0x00000010,0x00000018,0x00000020,0x00000028,0x00000030,0x00000038,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000
+        .type   .L_2il0floatpacket.15,@object
+        .size   .L_2il0floatpacket.15,64
+        .align 32
+.L_2il0floatpacket.7:
+        .long   0x00000000,0x00000001,0x00000002,0x00000003,0x00000004,0x00000005,0x00000006,0x00000007
+        .type   .L_2il0floatpacket.7,@object
+        .size   .L_2il0floatpacket.7,32
+        .align 8
+.L_2il0floatpacket.3:
+        .long   0x00000000,0x3cb00000
+        .type   .L_2il0floatpacket.3,@object
+        .size   .L_2il0floatpacket.3,8
+        .align 8
+.L_2il0floatpacket.4:
+        .long   0xe826d695,0x3e112e0b
+        .type   .L_2il0floatpacket.4,@object
+        .size   .L_2il0floatpacket.4,8
+        .align 8
+.L_2il0floatpacket.5:
+        .long   0x00000000,0x408f4000
+        .type   .L_2il0floatpacket.5,@object
+        .size   .L_2il0floatpacket.5,8
+        .align 8
+.L_2il0floatpacket.6:
+        .long   0x00000000,0x40c00000
+        .type   .L_2il0floatpacket.6,@object
+        .size   .L_2il0floatpacket.6,8
+        .align 8
+.L_2il0floatpacket.9:
+        .long   0x00000000,0x3fe00000
+        .type   .L_2il0floatpacket.9,@object
+        .size   .L_2il0floatpacket.9,8
+        .align 8
+.L_2il0floatpacket.10:
+        .long   0x00000000,0x405b0000
+        .type   .L_2il0floatpacket.10,@object
+        .size   .L_2il0floatpacket.10,8
+        .align 8
+.L_2il0floatpacket.11:
+        .long   0x00000000,0xbff00000
+        .type   .L_2il0floatpacket.11,@object
+        .size   .L_2il0floatpacket.11,8
+        .align 8
+.L_2il0floatpacket.12:
+        .long   0x00000000,0xc04b0000
+        .type   .L_2il0floatpacket.12,@object
+        .size   .L_2il0floatpacket.12,8
+        .align 8
+.L_2il0floatpacket.13:
+        .long   0x03131121,0x00000000
+        .type   .L_2il0floatpacket.13,@object
+        .size   .L_2il0floatpacket.13,8
+        .align 8
+.L_2il0floatpacket.14:
+        .long   0x00000000,0x3ff00000
+        .type   .L_2il0floatpacket.14,@object
+        .size   .L_2il0floatpacket.14,8
+        .section .rodata.str1.4, "aMS",@progbits,1
+        .align 4
+        .align 4
+.L_2__STRING.0:
+        .long   1769238607
+        .long   1702062445
+        .long   1195647076
+        .long   541936965
+        .long   1763734377
+        .long   1919902574
+        .long   1952671090
+        .long   1917132846
+        .long   980578162
+        .long   174400800
+        .byte   0
+        .type   .L_2__STRING.0,@object
+        .size   .L_2__STRING.0,41
+        .space 3, 0x00  # pad
+        .align 4
+.L_2__STRING.1:
+        .long   543583269
+        .long   539784045
+        .long   543583269
+        .long   1330398791
+        .long   175320912
+        .byte   0
+        .type   .L_2__STRING.1,@object
+        .size   .L_2__STRING.1,21
+        .data
+        .section .note.GNU-stack, ""
+# End

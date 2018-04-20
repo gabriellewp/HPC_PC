@@ -1,0 +1,1 @@
+scp di34mip@lxlogin8.lrz.de:~/code/a3_4_cg/*.gnuplot ./

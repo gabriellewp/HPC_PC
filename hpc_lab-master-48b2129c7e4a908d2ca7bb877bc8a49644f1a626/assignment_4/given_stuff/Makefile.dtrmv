@@ -1,0 +1,21 @@
+CXX=icpc
+CXXFLAGS=-O3 -xHost -qopenmp
+LDFLAGS=-qopenmp
+DEFINES=
+SOURCES=dtrmv.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=dtrmv
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $< -o $@ $(DEFINES)
+
+$(SOURCES): Makefile.dtrmv
+	touch $@
+
+clean:
+	rm *.o *.optrpt $(EXECUTABLE)

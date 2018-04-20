@@ -1,0 +1,23 @@
+NRHS=2000
+
+CXX=icpc
+CXXFLAGS=-O3 -xMIC-AVX512
+LDFLAGS=
+DEFINES=-DNRHS=$(NRHS)
+SOURCES=gauss.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=gauss
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $< -o $@ $(DEFINES)
+
+$(SOURCES): Makefile.gauss
+	touch $@
+
+clean:
+	rm *.o $(EXECUTABLE)

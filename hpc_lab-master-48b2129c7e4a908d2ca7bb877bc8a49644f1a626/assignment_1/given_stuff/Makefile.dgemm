@@ -1,0 +1,30 @@
+K=128
+
+# TODO
+# Adjust these values
+M=11
+N=11
+ALIGNMENT=8
+# END TODO
+
+CXX=icpc
+CXXFLAGS=-O3 -xMIC-AVX512
+LDFLAGS=
+DEFINES=-DALIGNMENT=$(ALIGNMENT) -DM=$(M) -DN=$(N) -DK=$(K)
+SOURCES=dgemm.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=dgemm
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $< -o $@ $(DEFINES)
+	
+$(SOURCES): Makefile.dgemm
+	touch $@
+
+clean:
+	rm *.o $(EXECUTABLE)
